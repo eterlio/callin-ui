@@ -1,6 +1,12 @@
-import { createRouter, createWebHistory } from "vue-router";
+import {
+  NavigationGuardNext,
+  RouteLocationNormalized,
+  createRouter,
+  createWebHistory,
+} from "vue-router";
 import { requireAuth } from "../middleware/auth";
-
+import Login from "../views/authentication/Login.vue";
+import Register from "../views/authentication/Register.vue";
 interface IRoutes {
   path: string;
   name: string;
@@ -9,28 +15,37 @@ interface IRoutes {
     requiresAuth: boolean;
   };
 }
+
 const routes: IRoutes[] = [
   {
-    path: "/",
-    name: "Home",
-    component: () => "<h1>Hello world</h1>",
-    meta: {
-      requiresAuth: true,
-    },
+    path: "/auth/login",
+    name: "Login",
+    component: Login,
+  },
+  {
+    path: "/auth/register",
+    name: "Register",
+    component: Register,
   },
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth) {
-    requireAuth(to, from, next);
-  } else {
-    next();
+router.beforeEach(
+  (
+    to: RouteLocationNormalized,
+    from: RouteLocationNormalized,
+    next: NavigationGuardNext
+  ) => {
+    if (to.meta.requiresAuth) {
+      requireAuth(to, from, next);
+    } else {
+      next();
+    }
   }
-});
+);
 
 export default router;

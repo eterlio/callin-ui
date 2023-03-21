@@ -10,7 +10,7 @@ axiosInstance.interceptors.request.use((config) => {
   const authStore = useAuthStore();
 
   if (authStore.accessToken) {
-    config?.headers?.Authorization = `Bearer ${authStore.accessToken}`;
+    (config as any).headers.Authorization = `Bearer ${authStore.accessToken}`;
   }
 
   return config;

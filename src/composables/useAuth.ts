@@ -14,7 +14,7 @@ export function useAuth() {
       });
 
       const { accessToken, refreshToken } = data;
-      authStore.setTokens(refreshToken, refreshToken);
+      authStore.setTokens(accessToken, refreshToken);
 
       router.push({ name: "Home" });
     } catch (error) {

@@ -1,5 +1,8 @@
-import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
-import { useRouter } from "vue-router";
+import {
+  useRouter,
+  NavigationGuardNext,
+  RouteLocationNormalized,
+} from "vue-router";
 import { useAuthStore } from "../store/auth";
 
 export function requireAuth(
@@ -8,7 +11,6 @@ export function requireAuth(
   next: NavigationGuardNext
 ) {
   const authStore = useAuthStore();
-
   if (authStore.isAuthenticated) {
     next();
   } else {
