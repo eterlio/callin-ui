@@ -6,7 +6,7 @@
     <div class="sidebar-container" :class="{ open: isSidebarOpen }">
       <div class="sidebar">
         <div class="sidebar-content">
-          <div class="main-content">
+          <div class="main-content bg-primary">
             <div class="sidebar-groups">
               <div class="sidebar-logo">
                 <div class="logo">

@@ -1,7 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Work+Sans&display=swap");
 
 :root {
-  --db-surface: "#ccc";
+  --icon-faded-bg: #e2edfb;
+  --icon-color:  #0a3977;
+--icon-border:  2px solid var(--icon-color);
 }
 * {
   margin: 0;
@@ -16,7 +18,6 @@
   margin-top: 0px;
 }
 .header-container {
-  background-color: red;
   color: var(--ds-text-subtlest, #6b778c);
   position: fixed;
   top: 0px;
@@ -24,6 +25,9 @@
   right: 0px;
   z-index: 201;
   padding: 0.291rem;
+box-shadow:
+0.9px 2.1px 3px rgb(0 0 0 / 2%), 7px 17px 24px rgb(0 0 0 / 2%)
+;
 }
 
 .main-header {
@@ -167,7 +171,7 @@
   display: flex;
   flex-shrink: 0;
   margin-right: 16px;
-  color: rgb(66, 82, 110);
+  color: rgb(54, 111, 196);
 }
 .link .link-icon span {
   display: inline-block;
@@ -176,20 +180,20 @@
   width: 24px;
   height: 24px;
 }
-.link .link-content{
-        display: flex;
-    flex-direction: column;
-    -webkit-box-flex: 1;
-    flex-grow: 1;
-    overflow-x: hidden;
+.link .link-content {
+  display: flex;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  overflow-x: hidden;
 }
-.link .link-content .text{
-        flex: 1 1 auto;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    line-height: 1.14286;
-  color: rgb(66, 82, 110);
+.link .link-content .text {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.14286;
+  color: rgb(54, 111, 196);
 }
 .nav-link .link:hover {
   background-color: rgb(235, 236, 240);

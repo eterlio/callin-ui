@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import "./index.css";
 import "./style/dashboard.css";
+import "./style/custom.css";
 import App from "./App.vue";
 import VueFeather from "vue-feather";
 import router from "./routes/index";
