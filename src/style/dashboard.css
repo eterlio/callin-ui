@@ -1,0 +1,219 @@
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans&display=swap");
+
+:root {
+  --db-surface: "#ccc";
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Work Sans", sans-serif !important;
+}
+.dashboard {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 0px);
+  margin-top: 0px;
+}
+.header-container {
+  background-color: red;
+  color: var(--ds-text-subtlest, #6b778c);
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 201;
+  padding: 0.291rem;
+}
+
+.main-header {
+  display: flex;
+  box-sizing: border-box;
+  height: 56px;
+  padding-right: 12px;
+  padding-left: 12px;
+  position: relative;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.sidebar-container {
+  bottom: 0px;
+  left: 0px;
+  position: fixed;
+  top: 65px;
+  z-index: 200;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+}
+.sidebar-container.open {
+  transform: translateX(0);
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  height: 100%;
+}
+.sidebar-content {
+  width: 247px;
+  will-change: width;
+  transition: width 300ms cubic-bezier(0.2, 0, 0, 1) 0s;
+}
+
+.sidebar .main-content {
+  box-sizing: border-box;
+  height: 100%;
+  left: 0px;
+  min-width: 100%;
+  overflow-x: hidden;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  background-color: rgb(244, 245, 247);
+  color: rgb(66, 82, 110);
+  animation-duration: 0.22s;
+  animation-fill-mode: forwards;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  transition-property: boxShadow, transform;
+  transition-duration: 0.22s;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+.sidebar-groups {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden auto;
+  width: 100%;
+}
+.sidebar-logo {
+  padding: 20px 16px;
+}
+.sidebar-logo .logo {
+  width: 100%;
+  -webkit-box-align: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+}
+.sidebar-items {
+  position: relative;
+  flex: 1 1 100%;
+  overflow-y: hidden;
+}
+.sidebar-items .items {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  height: 100%;
+  -webkit-box-pack: start;
+  justify-content: flex-start;
+  overflow-y: auto;
+  position: relative;
+}
+.items {
+  box-sizing: border-box;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 12px;
+}
+.nav-link {
+  width: 100%;
+  -webkit-box-align: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+}
+
+.nav-link .link {
+  -webkit-box-align: center;
+  align-items: center;
+  border: none;
+  border-radius: 3px;
+  box-sizing: border-box;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  flex-shrink: 0;
+  font-size: inherit;
+  height: 40px;
+  outline: none;
+  text-align: left;
+  text-decoration: none;
+  width: 100%;
+  padding-left: 12px;
+  padding-right: 12px;
+  transition: background-color 0.3ms ease-in-out;
+  margin: 0.3rem 0;
+}
+.link .link-icon {
+  -webkit-box-align: center;
+  align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  margin-right: 16px;
+  color: rgb(66, 82, 110);
+}
+.link .link-icon span {
+  display: inline-block;
+  flex-shrink: 0;
+  line-height: 1;
+  width: 24px;
+  height: 24px;
+}
+.link .link-content{
+        display: flex;
+    flex-direction: column;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    overflow-x: hidden;
+}
+.link .link-content .text{
+        flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.14286;
+  color: rgb(66, 82, 110);
+}
+.nav-link .link:hover {
+  background-color: rgb(235, 236, 240);
+  fill: rgb(235, 236, 240);
+}
+.nav-link .active {
+  background: rgb(235, 236, 240);
+}
+.main__content-wrapper {
+  will-change: padding-left;
+  transition: padding-left 300ms cubic-bezier(0.2, 0, 0, 1) 0s;
+  flex: 1 1 auto;
+  margin-left: 0px;
+  margin-top: 65px;
+  width: 0px;
+}
+.main__content-wrapper .section-content {
+  padding: 1.342rem;
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+}
+.main__content-wrapper .section-content .main-content {
+  flex: 1 1 0px;
+  min-width: 0px;
+  min-height: 100%;
+}
