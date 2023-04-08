@@ -20,11 +20,6 @@
   margin: 0.4rem 0;
 }
 
-.btn:hover,
-.btn-sm:hover {
-  background: #1705dbc5;
-}
-
 .bg-primary {
   background: #1805db;
 }
@@ -125,4 +120,21 @@
   height: 65px;
   width: 65px;
   font-size: 22px;
+}
+
+/* CARDS */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  /* border: 1px solid rgba(233, 233, 233, 0.125); */
+  border-radius: 6px;
+}
+
+.card-body {
+  flex: 1 1 auto;
+  padding: 1.25rem;
 }

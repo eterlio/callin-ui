@@ -2,8 +2,12 @@
 
 :root {
   --icon-faded-bg: #e2edfb;
-  --icon-color:  #0a3977;
---icon-border:  2px solid var(--icon-color);
+  --icon-color: #0a3977;
+  --icon-border: 2px solid var(--icon-color);
+}
+
+body {
+  background: #f7f7f7;
 }
 * {
   margin: 0;
@@ -20,14 +24,11 @@
 .header-container {
   color: var(--ds-text-subtlest, #6b778c);
   position: fixed;
-  top: 0px;
-  left: 0px;
-  right: 0px;
+  top: 0;
+  right: 0;
   z-index: 201;
   padding: 0.291rem;
-box-shadow:
-0.9px 2.1px 3px rgb(0 0 0 / 2%), 7px 17px 24px rgb(0 0 0 / 2%)
-;
+  align-items: center;
 }
 
 .main-header {
@@ -48,8 +49,8 @@ box-shadow:
   bottom: 0px;
   left: 0px;
   position: fixed;
-  top: 65px;
-  z-index: 200;
+  top: 0;
+  z-index: 999;
   transform: translateX(-100%);
   transition: transform 0.3s ease-in-out;
 }
@@ -78,8 +79,8 @@ box-shadow:
   position: absolute;
   top: 0px;
   width: 100%;
-  background-color: rgb(244, 245, 247);
-  color:#0a3977;
+  background-color: #fff;
+  color: #0a3977;
   animation-duration: 0.22s;
   animation-fill-mode: forwards;
   animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
@@ -171,7 +172,7 @@ box-shadow:
   display: flex;
   flex-shrink: 0;
   margin-right: 16px;
-  color:#0a3977;
+  color: #0a3977;
 }
 .link .link-icon span {
   display: inline-block;
@@ -193,7 +194,7 @@ box-shadow:
   text-overflow: ellipsis;
   white-space: nowrap;
   line-height: 1.14286;
-  color:#0a3977;
+  color: #0a3977;
 }
 .nav-link .link:hover {
   background-color: rgb(235, 236, 240);

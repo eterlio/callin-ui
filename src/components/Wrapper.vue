@@ -1,7 +1,10 @@
 <template>
   <div class="dashboard">
-    <div class="header-container" v-if="requireHeader">
-      <header class="main-header"></header>
+    <div class="header-container" v-if="requireHeader" :style="`${
+        isSidebarOpen || requireSidebar ? 'left:247px' : 'left: 0;'
+      }`">
+      <header class="main-header">
+      </header>
     </div>
     <div class="sidebar-container" :class="{ open: isSidebarOpen }" v-if="requireSidebar">
       <div class="sidebar">

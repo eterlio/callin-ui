@@ -2,23 +2,23 @@ import { IDashboardCard } from "../interface";
 
 export const mockDashboardData: IDashboardCard[] = [
   {
-    icon: "users",
-    title: "Total Client",
+    icon: "activity",
+    title: "Total Income",
     amount: 2445,
   },
   {
-    icon: "users",
-    title: "New Clients this month",
+    icon: "pie-chart",
+    title: "Total Expenses",
     amount: 25,
   },
   {
     icon: "users",
-    title: "Total Cases",
-    amount: 45,
+    title: "Total Users",
+    amount: 53,
   },
   {
-    icon: "users",
-    title: "Completed cases",
-    amount: 53,
+    icon: "briefcase",
+    title: "Total Organization",
+    amount: 45,
   },
 ];

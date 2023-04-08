@@ -1,6 +1,6 @@
 <template>
   <button :class="`icon-button ${iconType} icon-${size} ${iconShape}`">
-    <Icon :type="icon" />
+    <Icon :type="icon" :size="iconSize"/>
   </button>
 </template>
 <script lang="ts" setup>
@@ -20,6 +20,7 @@ interface IconButtonType {
   icon: string;
   size?: SIZE;
   shape?: "rounded"| "normal";
+  iconSize?: string;
 }
 const props = defineProps<IconButtonType>();
 const iconType = ref(props.type ? `icon-${props.type}` : `icon-normal`);

@@ -2,17 +2,25 @@
   <div class="card">
     <div class="card-body">
       <div class="dashboard-card">
-        <div class="card-header flex justify-between items-center mb-7">
-          <IconButton
-            :icon="icon as string"
-            shape="normal"
-            type="faded"
-            size="sm"
-          />
-          <Icon type="more-vertical" class="text-gray-800 text-sm" />
+        <div class="card-header mb-7">
+          <div class="dashboard-title flex justify-between items-center">
+            <p class="text-sm text-gray-500">{{ title }}</p>
+            <IconButton
+              :icon="icon as string"
+              shape="rounded"
+              type="faded"
+              size="sm"
+              iconSize="17"
+            />
+          </div>
         </div>
-        <div class="dashboard-title">
-          <p class="text-sm">{{ title }}</p>
+        <div class="dashboard-content flex items-end w-2/4 justify-between">
+          <div class="amount">
+            <h1>{{ amount.toLocaleString() }}</h1>
+          </div>
+          <div class="improvement-percentage">
+            <p class="text-sm text-green-500">-3.5%</p>
+          </div>
         </div>
       </div>
     </div>
@@ -20,7 +28,6 @@
 </template>
 
 <script lang="ts" setup>
-import Icon from "../buttons/Icon.vue";
 import IconButton from "../buttons/IconButton.vue";
 interface IDashboardCard {
   icon: string;
@@ -31,3 +38,8 @@ interface IDashboardCard {
 }
 defineProps<IDashboardCard>();
 </script>
+<style scoped>
+.improvement-percentage p {
+  font-weight: 600;
+}
+</style>
