@@ -1,6 +1,6 @@
 <template>
     <span style="cursor: pointer;">
-        <vue-feather :type="type"></vue-feather>
+        <vue-feather :type="type" :size="size"></vue-feather>
     </span>
 </template>
 
@@ -9,6 +9,10 @@ defineProps({
   type: {
     type: String,
     required: true,
+  },
+  size: {
+    type: String,
+    require: false
   }
 });
 </script>

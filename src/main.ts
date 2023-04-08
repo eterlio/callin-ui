@@ -8,10 +8,14 @@ import App from "./App.vue";
 import VueFeather from "vue-feather";
 import router from "./routes/index";
 import { createPinia } from "pinia";
+import { Row, Column, Hidden } from "vue-grid-responsive";
 const app = createApp(App);
 const pinia = createPinia();
 app.component(VueFeather.name, VueFeather);
 app.component("EasyDataTable", Vue3EasyDataTable);
+app.component("row", Row);
+app.component("column", Column);
+app.component("hidden", Hidden);
 
 app.use(router);
 app.use(pinia);

@@ -1,9 +1,9 @@
 <template>
   <div class="dashboard">
-    <div class="header-container">
+    <div class="header-container" v-if="requireHeader">
       <header class="main-header"></header>
     </div>
-    <div class="sidebar-container" :class="{ open: isSidebarOpen }">
+    <div class="sidebar-container" :class="{ open: isSidebarOpen }" v-if="requireSidebar">
       <div class="sidebar">
         <div class="sidebar-content">
           <div class="main-content bg-primary">
@@ -33,14 +33,16 @@
     <section
       class="main__content-wrapper"
       :style="`${
-        !isSidebarOpen ? 'padding-left:20px' : 'padding-left: 247px;'
+        !isSidebarOpen || !requireSidebar ? 'padding-left:0px' : 'padding-left: 247px;'
       }`"
     >
       <div>
         <div class="section-content">
           <div class="main-content">
+            <div class="title my-7 mb-8">
+              <h1>{{ title }}</h1>
+            </div>
             <slot />
-            <button @click="toggleSidebar">Click me</button>
           </div>
         </div>
       </div>
@@ -62,6 +64,9 @@ defineProps({
     required: false,
     default: true,
   },
+  title: {
+    type: String,
+  }
 });
 
 const isSidebarOpen = ref(true);
