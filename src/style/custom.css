@@ -11,8 +11,8 @@
   border: none;
   border-radius: 4px;
   padding: 0.7rem 2rem;
-  font-size: 14px;
-  font-weight: 550;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
   transition: 0.3s ease-in-out;
   min-width: 150px;
@@ -34,7 +34,7 @@
   border-radius: 4px;
   padding: 0.4rem 1rem;
   font-size: 14px;
-  font-weight: 550;
+  font-weight: 500;
   cursor: pointer;
   transition: 0.3s ease-in-out;
   min-width: 150px;
@@ -70,6 +70,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 4px;
+  line-height: 15px;
 }
 
 /* ICON STYLES */
@@ -104,29 +105,24 @@
   height: 30px;
   width: 30px;
   font-size: 16px;
-  line-height: -30px;
 }
 .icon-md {
   height: 45px;
   width: 45px;
   font-size: 18px;
-  line-height: -55px;
 }
 .icon-lg {
   height: 55px;
   width: 55px;
   font-size: 20px;
-  line-height: -65px;
 }
 .icon-ex-sm {
   height: 18px;
   width: 18px;
   font-size: 12px;
-  line-height: -28px;
 }
 .icon-ex-lg {
   height: 65px;
   width: 65px;
   font-size: 22px;
-  line-height: -75px;
 }

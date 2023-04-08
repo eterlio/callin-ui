@@ -79,7 +79,7 @@ box-shadow:
   top: 0px;
   width: 100%;
   background-color: rgb(244, 245, 247);
-  color: rgb(66, 82, 110);
+  color:#0a3977;
   animation-duration: 0.22s;
   animation-fill-mode: forwards;
   animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
@@ -171,7 +171,7 @@ box-shadow:
   display: flex;
   flex-shrink: 0;
   margin-right: 16px;
-  color: rgb(54, 111, 196);
+  color:#0a3977;
 }
 .link .link-icon span {
   display: inline-block;
@@ -193,7 +193,7 @@ box-shadow:
   text-overflow: ellipsis;
   white-space: nowrap;
   line-height: 1.14286;
-  color: rgb(54, 111, 196);
+  color:#0a3977;
 }
 .nav-link .link:hover {
   background-color: rgb(235, 236, 240);

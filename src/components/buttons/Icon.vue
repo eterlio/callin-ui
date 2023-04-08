@@ -1,5 +1,5 @@
 <template>
-    <span>
+    <span style="cursor: pointer;">
         <vue-feather :type="type"></vue-feather>
     </span>
 </template>
