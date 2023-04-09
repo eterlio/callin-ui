@@ -1,7 +1,7 @@
 <template>
   <Wrapper title="ADMIN DASHBOARD">
     <row container :gutter="12">
-      <column :xs="12" :md="4" :lg="3" v-for="data of dashboardData">
+      <column :xs="12" :md="6" :lg="3" v-for="data of dashboardData">
         <DashboardCard
           :icon="data.icon"
           :title="data.title"
@@ -10,10 +10,10 @@
         />
       </column>
     </row>
-
+    <!-- EXPENSES CHART -->
     <div class="my-8">
       <row :gutter="12">
-        <column :xs="12" :md="6" :lg="6">
+        <column :xs="12" :md="12" :lg="6">
           <div class="card">
             <div class="card-body">
               <div class="flex justify-between items-center">
@@ -36,16 +36,16 @@
             <div class="card-body">
               <div class="card-wrapper flex justify-between items-center">
                 <div class="title">
-                  <h4>Newly registered users</h4>
+                  <h4>Month Expenditure</h4>
                 </div>
                 <div
-                  class="chart-buttons bg-gray-100 p-1 flex justify-between items-center gap-2"
+                  class="chart-buttons bg-gray-100 p-1 flex justify-between items-center gap-2 mb-8"
                 >
                   <div class="button-box">
                     <label
                       for="monthly"
                       class="p-1 text-sm px-4 block cursor-pointer"
-                      :class="{ active: selected === 'option1' }"
+                      :class="{ active: expenditureSelected === 'option1' }"
                       >Monthly</label
                     >
                     <input
@@ -53,7 +53,7 @@
                       name="chart-button"
                       class="hidden"
                       value="option1"
-                      v-model="selected"
+                      v-model="expenditureSelected"
                       id="monthly"
                     />
                   </div>
@@ -61,7 +61,7 @@
                     <label
                       for="weekly"
                       class="p-1 text-sm px-4 block cursor-pointer"
-                      :class="{ active: selected === 'option2' }"
+                      :class="{ active: expenditureSelected === 'option2' }"
                       >Weekly</label
                     >
                     <input
@@ -69,29 +69,95 @@
                       name="chart-button"
                       class="hidden"
                       value="option2"
-                      v-model="selected"
+                      v-model="expenditureSelected"
                       id="weekly"
                     />
                   </div>
                 </div>
               </div>
               <div class="chart-content">
+                <Chart
+                  type="area"
+                  title="Monthly Expenditure"
+                  :data="chartData"
+                />
               </div>
             </div>
           </div>
         </column>
         <column :xs="12" :md="6" :lg="6">
+          <div class="card my-8">
+            <div class="card-body">
+              <div class="card-wrapper flex justify-between items-center">
+                <div class="title">
+                  <h4>Month Income</h4>
+                </div>
+                <div
+                  class="chart-buttons bg-gray-100 p-1 flex justify-between items-center gap-2 mb-8"
+                >
+                  <div class="button-box">
+                    <label
+                      for="income-monthly"
+                      class="p-1 text-sm px-4 block cursor-pointer"
+                      :class="{ active: incomeSelected === 'option1' }"
+                      >Monthly</label
+                    >
+                    <input
+                      type="radio"
+                      name="chart-button"
+                      class="hidden"
+                      value="option1"
+                      v-model="incomeSelected"
+                      id="income-monthly"
+                    />
+                  </div>
+                  <div class="button-box">
+                    <label
+                      for="income-weekly"
+                      class="p-1 text-sm px-4 block cursor-pointer"
+                      :class="{ active: incomeSelected === 'option2' }"
+                      >Weekly</label
+                    >
+                    <input
+                      type="radio"
+                      name="chart-button"
+                      class="hidden"
+                      value="option2"
+                      v-model="incomeSelected"
+                      id="income-weekly"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="chart-content">
+                <Chart type="bar" title="Monthly Income" :data="chartData" />
+              </div>
+            </div>
+          </div>
+        </column>
+      </row>
+    </div>
+
+    <!-- USERS CHART -->
+    <div class="my-5">
+      <row :gutter="12">
+        <column :xs="12" :md="12" :lg="6">
           <div class="card">
             <div class="card-body">
-              <div class="flex justify-between items-center">
-                <div class="title">
-                  <h4>Newly registered users</h4>
-                </div>
-                <RouterLink
-                  to=""
-                  class="no-underline text-sm text-gray-800 font-bold"
-                  >View All</RouterLink
-                >
+              <h1>ORGANIZATION LIST</h1>
+            </div>
+          </div>
+        </column>
+        <column :xs="12" :md="12" :lg="6">
+          <div class="card">
+            <div class="card-body">
+              <div class="title">
+                <h2>Users chart</h2>
+              </div>
+
+              <div class="chart-content">
+                  <DoughNutChart
+                />
               </div>
             </div>
           </div>
@@ -102,13 +168,25 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import Wrapper from "../../components/Wrapper.vue";
 import DashboardCard from "../../components/dashboard/Card.vue";
 import { IDashboardCard } from "../../interface";
 import { mockDashboardData } from "../../mock/dashboardData";
+import Chart from "../Chart.vue";
+import DoughNutChart from "../DoughNutChart.vue";
 const dashboardData = ref<IDashboardCard[]>(mockDashboardData);
-const selected = ref("option1");
+const incomeSelected = ref("option1");
+const expenditureSelected = ref("option1");
+
+const chartData = reactive({
+  "Monthly Expenditure": [
+    30, 40, 445, 50, 4956, 6090, 70, 9021, 9967, 70, 90, 67,
+  ],
+  "Monthly Income": [
+    30, 40, -445, 550, 4956, 6090, 6770, 9021, 9967, 707, 590, 677,
+  ]
+});
 </script>
 <style scoped>
 .active {
@@ -118,10 +196,11 @@ const selected = ref("option1");
   transition: background-color 0.3s ease-in-out;
 }
 @media (max-width: 768px) {
-  .card-wrapper{
+  .card-wrapper {
     display: block;
   }
-  .chart-buttons{
+  .chart-buttons {
     margin: 1rem 0;
   }
-}</style>
+}
+</style>

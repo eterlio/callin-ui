@@ -14,7 +14,7 @@
             />
           </div>
         </div>
-        <div class="dashboard-content flex items-end w-2/4 justify-between">
+        <div class="dashboard-content flex items-end  gap-4">
           <div class="amount">
             <h1>{{ amount.toLocaleString() }}</h1>
           </div>

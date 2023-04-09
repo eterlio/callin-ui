@@ -9,6 +9,7 @@ import VueFeather from "vue-feather";
 import router from "./routes/index";
 import { createPinia } from "pinia";
 import { Row, Column, Hidden } from "vue-grid-responsive";
+import VueApexCharts from "vue3-apexcharts";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -17,7 +18,8 @@ app.component("EasyDataTable", Vue3EasyDataTable);
 app.component("row", Row);
 app.component("column", Column);
 app.component("hidden", Hidden);
-
+app.component("apexchart", VueApexCharts);
+// app.use(VueApexCharts);
 app.use(router);
 app.use(pinia);
 app.mount("#app");
