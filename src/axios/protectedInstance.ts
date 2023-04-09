@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import { useAuthStore } from "../store/auth/index";
 
 const axiosInstance = axios.create({
@@ -6,7 +6,7 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-axiosInstance.interceptors.request.use((config) => {
+axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const authStore = useAuthStore();
 
   if (authStore.accessToken) {
@@ -17,7 +17,7 @@ axiosInstance.interceptors.request.use((config) => {
 });
 
 axiosInstance.interceptors.response.use(
-  (response) => response,
+  (response: AxiosResponse) => response,
   async (error) => {
     const authStore = useAuthStore();
 
