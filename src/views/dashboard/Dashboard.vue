@@ -1,15 +1,13 @@
 <template>
   <Wrapper title="ADMIN DASHBOARD">
-    <row container :gutter="12">
-      <column :xs="12" :md="6" :lg="3" v-for="data of dashboardData">
-        <DashboardCard
-          :icon="data.icon"
-          :title="data.title"
-          :amount="data.amount"
-          :key="Math.random()"
-        />
-      </column>
-    </row>
+      <Suspense @pending="pending" @fallback="fallback" @resolve="resolve">
+        <template #default>
+          <DashboardCardData />
+        </template>
+        <template #fallback>
+          <DashboardCardDataShimmer />
+        </template>
+      </Suspense>
     <!-- EXPENSES CHART -->
     <div class="my-8">
       <row :gutter="12">
@@ -34,7 +32,7 @@
           </div>
           <div class="card my-8">
             <div class="card-body">
-              <div class="card-wrapper flex justify-between items-center">
+              <div class="card-wrapper flex justify-between">
                 <div class="title">
                   <h4>Month Expenditure</h4>
                 </div>
@@ -88,7 +86,7 @@
         <column :xs="12" :md="6" :lg="6">
           <div class="card my-8">
             <div class="card-body">
-              <div class="card-wrapper flex justify-between items-center">
+              <div class="card-wrapper flex justify-between ">
                 <div class="title">
                   <h4>Month Income</h4>
                 </div>
@@ -156,8 +154,7 @@
               </div>
 
               <div class="chart-content">
-                  <DoughNutChart
-                />
+                <DoughNutChart />
               </div>
             </div>
           </div>
@@ -170,12 +167,19 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import Wrapper from "../../components/Wrapper.vue";
-import DashboardCard from "../../components/dashboard/Card.vue";
-import { IDashboardCard } from "../../interface";
-import { mockDashboardData } from "../../mock/dashboardData";
 import Chart from "../Chart.vue";
 import DoughNutChart from "../DoughNutChart.vue";
-const dashboardData = ref<IDashboardCard[]>(mockDashboardData);
+import DashboardCardData from "./DashboardCardData.vue";
+import DashboardCardDataShimmer from "../../components/shimmers/DashboardCardShimmer.vue";
+const pending = () => {
+  console.log("Pending suspense");
+};
+const fallback = () => {
+  console.log("fallback suspense");
+};
+const resolve = () => {
+  console.log("resolve suspense");
+};
 const incomeSelected = ref("option1");
 const expenditureSelected = ref("option1");
 
@@ -185,7 +189,7 @@ const chartData = reactive({
   ],
   "Monthly Income": [
     30, 40, -445, 550, 4956, 6090, 6770, 9021, 9967, 707, 590, 677,
-  ]
+  ],
 });
 </script>
 <style scoped>

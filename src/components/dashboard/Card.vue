@@ -25,7 +25,7 @@
       </div>
     </div>
   </div>
-</template>
+    </template>
 
 <script lang="ts" setup>
 import IconButton from "../buttons/IconButton.vue";
