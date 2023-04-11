@@ -8,6 +8,7 @@
       "
       :value="modelValue"
       :class="{ 'is-invalid invalid-input': !inputHasErrors.isValid }"
+      style=""
     />
     <small
       :class="{ 'text-sm invalid-feedback': !inputHasErrors.isValid }"
@@ -33,6 +34,7 @@ interface IInput {
   label?: string;
   id?: string;
   required?: boolean;
+  width?: string;
 }
 defineEmits(["update:modelValue", "increment"]);
 const props = defineProps<IInput>();
@@ -89,7 +91,6 @@ watch(
 .input-container input {
   outline: none;
   display: block;
-  width: 100%;
   padding: 0.612rem 0.75rem;
   font-size: 1rem;
   font-weight: 400;

@@ -1,6 +1,23 @@
 <template>
   <div class="card">
-    <div class="card-body"></div>
+    <div class="card-body">
+      <!-- TODO - Work on the drag and drop of column and add it functionality -->
+      <div class="columns-container">
+        <div class="columns">
+          <div class="columns-wrapper" v-for="header in tableHeaders">
+            <div class="column-check">
+              <input type="checkbox" name="column-check" id="" :value="header.text" checked />
+            </div>
+            <div class="column-name">
+              <p>{{ header.text.toLowerCase() }}</p>
+            </div>
+            <div class="drag-icon">
+              <img src="/drag.svg" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <EasyDataTable
       :headers="tableHeaders"
       :items="items"
@@ -27,7 +44,7 @@
 
       <!-- EXPANDED SLOT -->
       <template #expand="item" v-if="expandable">
-       <slot name="expanded"></slot>
+        <slot name="expanded"></slot>
       </template>
 
       <!-- PREVIOUS AND NEXT BUTTONS SLOT -->
@@ -46,7 +63,7 @@
 import { ref, watchEffect } from "vue";
 import type { ClickRowArgument, Header, Item } from "vue3-easy-data-table";
 import TableLoader from "./TableLoader.vue";
-import { watch } from "fs";
+import "../../style/table.css";
 interface ITableProps {
   headers: Header[];
   items?: Item[];
@@ -90,6 +107,7 @@ const items = ref<Item[]>([
     country: "USA",
   },
 ]);
+
 watchEffect(() => {
   if (itemsSelected.value.length) {
     emits("selectedRows", itemsSelected.value);
