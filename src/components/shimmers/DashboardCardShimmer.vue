@@ -44,7 +44,7 @@ const shimmerCount = [1, 2, 3, 4];
   height: 40px;
 }
 .percentage {
-  width: 20px;
+  width: 45px;
   height: 20px;
 }
 

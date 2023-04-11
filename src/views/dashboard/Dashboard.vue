@@ -1,13 +1,18 @@
 <template>
   <Wrapper title="ADMIN DASHBOARD">
-      <Suspense @pending="pending" @fallback="fallback" @resolve="resolve">
-        <template #default>
-          <DashboardCardData />
-        </template>
-        <template #fallback>
-          <DashboardCardDataShimmer />
-        </template>
-      </Suspense>
+    <Suspense>
+      <template #default>
+        <DashboardCardData />
+      </template>
+      <template #fallback>
+        <DashboardCardDataShimmer />
+      </template>
+    </Suspense>
+
+    <div class="my-4">
+      <Table :headers="headers">
+        </Table>
+    </div>
     <!-- EXPENSES CHART -->
     <div class="my-8">
       <row :gutter="12">
@@ -27,6 +32,12 @@
 
               <div class="chart-content">
                 <h1>Users table comes here</h1>
+                <Input
+                  type="number"
+                  label="Email"
+                  v-model="email"
+                  :required="false"
+                />
               </div>
             </div>
           </div>
@@ -86,7 +97,7 @@
         <column :xs="12" :md="6" :lg="6">
           <div class="card my-8">
             <div class="card-body">
-              <div class="card-wrapper flex justify-between ">
+              <div class="card-wrapper flex justify-between">
                 <div class="title">
                   <h4>Month Income</h4>
                 </div>
@@ -171,18 +182,22 @@ import Chart from "../Chart.vue";
 import DoughNutChart from "../DoughNutChart.vue";
 import DashboardCardData from "./DashboardCardData.vue";
 import DashboardCardDataShimmer from "../../components/shimmers/DashboardCardShimmer.vue";
-const pending = () => {
-  console.log("Pending suspense");
-};
-const fallback = () => {
-  console.log("fallback suspense");
-};
-const resolve = () => {
-  console.log("resolve suspense");
-};
+import Input from "../../components/inputs/Input.vue";
+import Table from "../../components/table/Table.vue";
 const incomeSelected = ref("option1");
 const expenditureSelected = ref("option1");
+const email = ref("");
 
+const headers = ref([
+  { text: "PLAYER", value: "player" },
+  { text: "TEAM", value: "team" },
+  { text: "NUMBER", value: "number" },
+  { text: "POSITION", value: "position" },
+  { text: "HEIGHT", value: "indicator.height" },
+  { text: "WEIGHT (lbs)", value: "indicator.weight", sortable: true },
+  { text: "LAST ATTENDED", value: "lastAttended", width: 200 },
+  { text: "COUNTRY", value: "country" },
+]);
 const chartData = reactive({
   "Monthly Expenditure": [
     30, 40, 445, 50, 4956, 6090, 70, 9021, 9967, 70, 90, 67,
