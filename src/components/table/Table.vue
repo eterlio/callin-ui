@@ -1,20 +1,58 @@
 <template>
   <div class="card">
-    <div class="card-body">
-      <!-- TODO - Work on the drag and drop of column and add it functionality -->
-      <div class="columns-container">
-        <div class="columns">
-          <div class="columns-wrapper" v-for="header in tableHeaders">
-            <div class="column-check">
-              <input type="checkbox" name="column-check" id="" :value="header.text" checked />
+    <div class="card-body" style="padding-bottom: 0px !important">
+      <div class="sort-button__container">
+        <div class="search-container">
+          <Input type="text" v-model="searchValue" />
+        </div>
+        <div class="sort-button dropdown">
+        
+            <button
+              class="btn"
+              @click="enableColumnDropDown = !enableColumnDropDown"
+            >
+              <Icon type="columns" size="23" />
+              <span>Columns</span>
+            </button>
+            <!-- TODO - Work on the drag and drop of column and add it functionality -->
+            <div
+              class="columns-container"
+              v-if="enableColumnDropDown"
+              ref="dropdown"
+            >
+              <div class="columns">
+                <div
+                  class="columns-wrapper"
+                  v-for="(header, index) in tableHeaders"
+                  :draggable="true"
+                  @dragstart="dragStartHandler(index)"
+                  @dragover.prevent
+                  @drop="dropHandler($event, index)"
+                  @dragend="dragEndHandler"
+                  :key="index"
+                >
+                  <div class="column-check">
+                    <input
+                      type="checkbox"
+                      name="column-check"
+                      :id="header.text"
+                      :value="header.text"
+                      checked
+                      class="hidden"
+                      @change="handleElementChange($event, index, header.value)"
+                    />
+                    <label :for="header.text"></label>
+                  </div>
+                  <div class="column-name">
+                    <p class="font-bold">{{ header.text.toLowerCase() }}</p>
+                  </div>
+                  <div class="drag-icon">
+                    <img src="/drag.svg" />
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="column-name">
-              <p>{{ header.text.toLowerCase() }}</p>
-            </div>
-            <div class="drag-icon">
-              <img src="/drag.svg" />
-            </div>
-          </div>
+          
         </div>
       </div>
     </div>
@@ -28,6 +66,7 @@
       no-hover
       @click-row="showRow"
       :loading="loading"
+      :search-value="searchValue"
     >
       <!-- LOADER SLOT -->
       <template #loading>
@@ -60,10 +99,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watchEffect } from "vue";
+import { reactive, ref, watchEffect } from "vue";
 import type { ClickRowArgument, Header, Item } from "vue3-easy-data-table";
 import TableLoader from "./TableLoader.vue";
 import "../../style/table.css";
+import Icon from "../buttons/Icon.vue";
+import Input from "../inputs/Input.vue";
+import { onClickOutside } from "@vueuse/core";
 interface ITableProps {
   headers: Header[];
   items?: Item[];
@@ -74,19 +116,22 @@ const props = defineProps<ITableProps>();
 const emits = defineEmits(["clickedRow", "selectedRows"]);
 
 // TABLE HEADERS
-const tableHeaders = props.headers.map(
-  (head: Header, index: number, data: Header[]) => {
+const tableHeaders = reactive(
+  props.headers.map((head: Header, index: number, data: Header[]) => {
     if (data.length > 8) {
       data[0].fixed = true;
       data[1].fixed = true;
       data[3].fixed = true;
     }
     return { ...head, sortable: true };
-  }
+  })
 );
 
 // REFS
+const dropdown = ref(null);
+const enableColumnDropDown = ref(false);
 const itemsSelected = ref<Item[]>([]);
+const searchValue = ref("");
 const items = ref<Item[]>([
   {
     player: "Stephen Curry",
@@ -96,18 +141,53 @@ const items = ref<Item[]>([
     indicator: { height: "6-2", weight: 185 },
     lastAttended: "Davidson",
     country: "USA",
+    town:"brenda",
+    city:"Texas",
+    state:"Houston",
+    zipcode:"56566",
   },
   {
-    player: "Stephen Curry",
-    team: "GSW",
-    number: 30,
-    position: "G",
-    indicator: { height: "6-2", weight: 185 },
-    lastAttended: "Davidson",
+    player: "Lebron James",
+    team: "LAL",
+    number: 6,
+    position: "F",
+    indicator: { height: "6-9", weight: 250 },
+    lastAttended: "St. Vincent-St. Mary HS (OH)",
     country: "USA",
+     town:"brenda",
+    city:"Texas",
+    state:"Houston",
+    zipcode:"56566",
+  },
+  {
+    player: "Kevin Durant",
+    team: "BKN",
+    number: 7,
+    position: "F",
+    indicator: { height: "6-10", weight: 240 },
+    lastAttended: "Texas-Austin",
+    country: "USA",
+     town:"brenda",
+    city:"Texas",
+    state:"Houston",
+    zipcode:"56566",
+  },
+  {
+    player: "Giannis Antetokounmpo",
+    team: "MIL",
+    number: 34,
+    position: "F",
+    indicator: { height: "6-11", weight: 242 },
+    lastAttended: "Filathlitikos",
+    country: "Greece",
+     town:"brenda",
+    city:"Texas",
+    state:"Houston",
+    zipcode:"56566",
   },
 ]);
 
+onClickOutside(dropdown, () => (enableColumnDropDown.value = false));
 watchEffect(() => {
   if (itemsSelected.value.length) {
     emits("selectedRows", itemsSelected.value);
@@ -116,6 +196,44 @@ watchEffect(() => {
 });
 const showRow = (item: ClickRowArgument) => {
   emits("clickedRow", item);
+};
+
+let dragIndex: number | null = null;
+
+const dragStartHandler = (index: number) => {
+  dragIndex = index;
+};
+
+const dropHandler = (event: Event, targetIndex: number) => {
+  const itemToMove = tableHeaders[dragIndex as number];
+  tableHeaders.splice(dragIndex as number, 1);
+  tableHeaders.splice(targetIndex, 0, itemToMove);
+};
+
+const handleElementChange = (
+  event: Event,
+  index: number,
+  headerValue: string
+) => {
+  const targetElement = event.target as HTMLInputElement;
+  const inputLabel = targetElement.nextElementSibling;
+  const columnWrapper = (targetElement.parentElement as HTMLElement)
+    .parentElement as HTMLElement;
+  const pToFade = columnWrapper.querySelector(".column-name p");
+  const dragIcon = columnWrapper.querySelector(".drag-icon");
+
+  if (!targetElement.checked) {
+    pToFade?.classList.add("fade-text");
+    inputLabel?.classList.add("background-fade");
+    dragIcon?.classList.add("fade-away");
+  } else {
+    pToFade?.classList.remove("fade-text");
+    inputLabel?.classList.remove("background-fade");
+    dragIcon?.classList.remove("fade-away");
+  }
+};
+const dragEndHandler = () => {
+  dragIndex = null;
 };
 </script>
 <style>
@@ -156,12 +274,5 @@ const showRow = (item: ClickRowArgument) => {
   --easy-table-scrollbar-corner-color: transparent;
 
   --easy-table-loading-mask-background-color: transparent;
-}
-.no-data__container {
-  width: 200px;
-  margin: 0 auto;
-}
-.no-data__container img {
-  width: 100%;
 }
 </style>

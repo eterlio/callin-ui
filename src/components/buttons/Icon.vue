@@ -16,3 +16,8 @@ defineProps({
   }
 });
 </script>
+<style scoped>
+ span{
+  display: flex;
+ }
+</style>

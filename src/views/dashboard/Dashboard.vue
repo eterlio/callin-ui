@@ -197,6 +197,10 @@ const headers = ref([
   { text: "WEIGHT (lbs)", value: "indicator.weight", sortable: true },
   { text: "LAST ATTENDED", value: "lastAttended", width: 200 },
   { text: "COUNTRY", value: "country" },
+  { text: "TOWN", value: "town" },
+  { text: "STATE", value: "state" },
+  { text: "ZIPCODE", value: "zipcode" },
+  { text: "CITY", value: "city" },
 ]);
 const chartData = reactive({
   "Monthly Expenditure": [
