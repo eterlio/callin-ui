@@ -1,7 +1,7 @@
 interface IObject {
   [key: string]: any;
 }
-function getObjectDifference(
+export default function getObjectDifference(
   baseObject: IObject,
   objectToCompare: IObject,
   fieldsToIgnore: string[]
