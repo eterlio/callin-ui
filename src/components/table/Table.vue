@@ -118,11 +118,6 @@ const emits = defineEmits(["clickedRow", "selectedRows"]);
 // TABLE HEADERS
 const tableHeaders = reactive(
   props.headers.map((head: Header, index: number, data: Header[]) => {
-    if (data.length > 8) {
-      data[0].fixed = true;
-      data[1].fixed = true;
-      data[3].fixed = true;
-    }
     return { ...head, sortable: true };
   })
 );
