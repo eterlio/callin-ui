@@ -77,7 +77,9 @@
               <RegistrationForm />
             </div>
             <div class="submit">
-              <button @click="validStepOneButtonClick">Continue</button>
+              <button @click="validStepOneButtonClick" :disabled="!disableStep">
+                Continue
+              </button>
             </div>
             <div v-if="currentStep === 'step-3'"><h1>Step 3</h1></div>
             <div v-if="currentStep === 'step-4'"><h1>Step 4</h1></div>
@@ -114,7 +116,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import Icon from "../../components/buttons/Icon.vue";
 import FormTitle from "./components/FormTitle.vue";
 import RegistrationForm from "./components/RegistrationForm.vue";
@@ -153,7 +155,7 @@ const stepValues = reactive<StepValue>({
     value: {},
   },
 });
-const steps = ref([
+const steps = ref<any>([
   {
     key: "stepOne",
     canClick: true,
@@ -178,13 +180,31 @@ const steps = ref([
 
 function validStepOneButtonClick() {
   const currentStepIndex = steps.value.findIndex(
-    (step) => step.value === currentStep.value
+    (step: any) => step.value === currentStep.value
   );
   if (currentStepIndex !== -1 && currentStepIndex < steps.value.length - 1) {
     currentStep.value = steps.value[currentStepIndex + 1].value;
     steps.value[currentStepIndex + 1].canClick = true;
   }
 }
+
+const disableStep = computed(() => {
+  const currentStepIndex = steps.value.findIndex(
+    (step: any) => step.value === currentStep.value
+  );
+  console.log(currentStepIndex);
+  const currentStepKey = steps.value[currentStepIndex].key;
+
+  const currentStepValue = stepValues[currentStepKey];
+
+  if (typeof currentStepValue.value === "string")
+    return !!currentStepValue.value;
+
+  const hasValue = Object.values(currentStepValue.value).every(
+    (value: any) => value !== ""
+  );
+  return hasValue;
+});
 </script>
 
 <style>

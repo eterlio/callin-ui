@@ -4,9 +4,18 @@
     <div class="input-container">
       <Input
         type="text"
-        label="Email"
+        label="Organization Name"
         :required="false"
-        :modelValue="inputData.email"
+        :modelValue="inputData.organizationName"
+        width="100%"
+      />
+    </div>
+    <div class="input-container">
+      <Input
+        type="text"
+        label="Organization Email"
+        :required="false"
+        :modelValue="inputData.organizationEmail"
         width="100%"
       />
     </div>
@@ -15,11 +24,10 @@
         type="password"
         label="Password"
         :required="false"
-        :modelValue="inputData.password"
+        :modelValue="inputData.organizationPassword"
         width="100%"
       />
     </div>
-    <div class="input-container"></div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -28,7 +36,8 @@ import Input from "../../../components/inputs/Input.vue";
 import { reactive } from "vue";
 
 const inputData = reactive({
-  email: "",
-  password: "",
+  organizationEmail: "",
+  organizationPassword: "",
+  organizationName: "",
 });
 </script>
