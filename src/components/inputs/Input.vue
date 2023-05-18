@@ -8,7 +8,7 @@
       "
       :value="modelValue"
       :class="{ 'is-invalid invalid-input': !inputHasErrors.isValid }"
-      style=""
+      :style="{ width: width }"
     />
     <small
       :class="{ 'text-sm invalid-feedback': !inputHasErrors.isValid }"
@@ -91,14 +91,14 @@ watch(
 .input-container input {
   outline: none;
   display: block;
-  padding: 0.612rem 0.75rem;
+  padding: 0.812rem 0.75rem;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
   color: #212529;
   background-color: #e2edfb30;
   background-clip: padding-box;
-  border: 1px solid #0a3977a5;
+  border: 1px solid #0a39772a;
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out,
     background-color 0.15s ease-in-out;
