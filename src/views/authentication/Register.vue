@@ -128,15 +128,18 @@ const stepValues = reactive<any>({
   },
   stepTwo: {
     key: "step-2",
-    value: "",
+    value: {
+      email: "",
+      password: "",
+    },
   },
   stepThree: {
     key: "step-3",
-    value: "",
+    value: {},
   },
   stepFour: {
     key: "step-4",
-    value: "",
+    value: {},
   },
 });
 const steps = ref([
