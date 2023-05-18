@@ -17,11 +17,10 @@
               class="account-type__container"
               v-if="currentStep === 'step-1'"
             >
-              <div class="header"><h1>Create an account</h1></div>
-              <p>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Molestias, voluptate.
-              </p>
+              <FormTitle
+                header="Choose Account"
+                paragraph="Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit, ducimus?"
+              />
               <div class="account-selectors__container">
                 <div class="selector my-5">
                   <input
@@ -40,7 +39,7 @@
                     </div>
                     <div class="main">
                       <p class="font-semibold">I'm an individual</p>
-                      <p class="mt-2">
+                      <p class="mt-2 text-sm">
                         I'm an individual looking for legal aid.
                       </p>
                     </div>
@@ -64,20 +63,21 @@
                     </div>
                     <div class="main">
                       <p class="font-semibold">I'm an organization</p>
-                      <p class="mt-2">
-                        I'm an individual looking for legal aid.
+                      <p class="mt-2 text-sm">
+                        I'm an organization looking to provide legal aid to
+                        clients.
                       </p>
                     </div>
                     <div class="check"></div>
                   </label>
                 </div>
               </div>
-              <div class="submit">
-                <button @click="validStepOneButtonClick">Continue</button>
-              </div>
             </div>
             <div v-if="currentStep === 'step-2'">
-              <h1>Step 2</h1>
+              <RegistrationForm />
+            </div>
+            <div class="submit">
+              <button @click="validStepOneButtonClick">Continue</button>
             </div>
             <div v-if="currentStep === 'step-3'"><h1>Step 3</h1></div>
             <div v-if="currentStep === 'step-4'"><h1>Step 4</h1></div>
@@ -116,6 +116,8 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import Icon from "../../components/buttons/Icon.vue";
+import FormTitle from "./components/FormTitle.vue";
+import RegistrationForm from "./components/RegistrationForm.vue";
 const currentStep = ref("step-1");
 type Steps = "step-1" | "step-2" | "step-3" | "step-4";
 interface StepValue {
