@@ -93,11 +93,7 @@
                     name="steps"
                     :checked="index === 0"
                     v-model="currentStep"
-                    :disabled="
-                      !step.canClick &&
-                      index !== 0 &&
-                      !stepValues[step.key].value
-                    "
+                    :disabled="!step.canClick"
                     class="hidden"
                   />
                   <label
@@ -121,7 +117,20 @@
 import { reactive, ref } from "vue";
 import Icon from "../../components/buttons/Icon.vue";
 const currentStep = ref("step-1");
-const stepValues = reactive<any>({
+type Steps = "step-1" | "step-2" | "step-3" | "step-4";
+interface StepValue {
+  [key: string]: {
+    key: Steps;
+    value: string | Record<string, string>;
+  };
+}
+interface Step {
+  [key: string]: {
+    key: Steps;
+    value: string | Record<string, string>;
+  };
+}
+const stepValues = reactive<StepValue>({
   stepOne: {
     key: "step-1",
     value: "",
