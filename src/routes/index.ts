@@ -8,6 +8,7 @@ import { requireAuth } from "../middleware/auth";
 import Login from "../views/authentication/Login.vue";
 import Register from "../views/authentication/Register.vue";
 import Dashboard from "../views/dashboard/Dashboard.vue";
+import Landing from "../views/Landing.vue";
 import NotFound from "../components/NotFound.vue";
 interface IRoutes {
   path: string;
@@ -21,6 +22,11 @@ interface IRoutes {
 const routes: IRoutes[] = [
   {
     path: "/",
+    name: "Landing",
+    component: Landing,
+  },
+  {
+    path: "/dashboard",
     name: "Dashboard",
     component: Dashboard,
   },
