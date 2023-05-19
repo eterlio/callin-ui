@@ -1,31 +1,32 @@
 <template>
   <div class="form-container">
     <FormTitle header="Create Account" paragraph="Create an account with us" />
-    <div class="input-container">
-      <Input
-        type="text"
-        label="Organization Name"
-        :required="false"
-        :modelValue="inputData.organizationName"
-        width="100%"
-      />
+    <div class="external__auth">
+      <ExternalAuth name="google" />
+      <ExternalAuth name="facebook" />
     </div>
+    <div class="line-with-text">
+      <LineWithText text="Or continue with email" />
+    </div>
+
     <div class="input-container">
       <Input
         type="text"
-        label="Organization Email"
-        :required="false"
-        :modelValue="inputData.organizationEmail"
+        label="Email"
+        :required="true"
         width="100%"
+        v-model="inputData.email"
+        @input="$emit('sendRegistrationData', inputData)"
       />
     </div>
     <div class="input-container">
       <Input
         type="password"
         label="Password"
-        :required="false"
-        :modelValue="inputData.organizationPassword"
+        :required="true"
         width="100%"
+        v-model="inputData.password"
+        @input="$emit('sendRegistrationData', inputData)"
       />
     </div>
   </div>
@@ -34,10 +35,15 @@
 import FormTitle from "./FormTitle.vue";
 import Input from "../../../components/inputs/Input.vue";
 import { reactive } from "vue";
+import ExternalAuth from "./ExternalAuth.vue";
+import LineWithText from "./LineWithText.vue";
 
 const inputData = reactive({
-  organizationEmail: "",
-  organizationPassword: "",
-  organizationName: "",
+  email: "",
+  password: "",
 });
+const externalAuthData = {
+  google: {},
+  facebook: {},
+};
 </script>

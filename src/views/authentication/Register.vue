@@ -9,7 +9,9 @@
             </div>
             <div class="login-banner">
               <span>Already have an account?</span>
-              <RouterLink to="/auth/login">Login</RouterLink>
+              <RouterLink to="/auth/login" class="font-bold text-primary ml-3"
+                >Log in</RouterLink
+              >
             </div>
           </div>
           <div class="main-content">
@@ -39,7 +41,7 @@
                     </div>
                     <div class="main">
                       <p class="font-semibold">I'm an individual</p>
-                      <p class="mt-2 text-sm">
+                      <p class="mt-2 text-sm text-primary">
                         I'm an individual looking for legal aid.
                       </p>
                     </div>
@@ -63,7 +65,7 @@
                     </div>
                     <div class="main">
                       <p class="font-semibold">I'm an organization</p>
-                      <p class="mt-2 text-sm">
+                      <p class="mt-2 text-sm text-primary">
                         I'm an organization looking to provide legal aid to
                         clients.
                       </p>
@@ -73,17 +75,22 @@
                 </div>
               </div>
             </div>
-            <div v-if="currentStep === 'step-2'">
-              <RegistrationForm />
+            <div v-if="currentStep === 'step-2'" class="registrationForm">
+              <RegistrationForm
+                @sendRegistrationData="handleRegistrationInput"
+              />
             </div>
+            <!-- BUTTONS -->
             <div class="submit">
               <button @click="validStepOneButtonClick" :disabled="!disableStep">
-                Continue
+                {{ currentStep !== "step-1" ? "Register" : "Continue" }}
               </button>
             </div>
             <div v-if="currentStep === 'step-3'"><h1>Step 3</h1></div>
             <div v-if="currentStep === 'step-4'"><h1>Step 4</h1></div>
           </div>
+
+          <!-- FOOTER -->
           <div class="footer">
             <div class="steps-container">
               <div class="steps">
@@ -125,13 +132,13 @@ type Steps = "step-1" | "step-2" | "step-3" | "step-4";
 interface StepValue {
   [key: string]: {
     key: Steps;
-    value: string | Record<string, string>;
+    value: string | any;
   };
 }
 interface Step {
   [key: string]: {
     key: Steps;
-    value: string | Record<string, string>;
+    value: string | Record<any, string>;
   };
 }
 const stepValues = reactive<StepValue>({
@@ -146,14 +153,6 @@ const stepValues = reactive<StepValue>({
       password: "",
     },
   },
-  stepThree: {
-    key: "step-3",
-    value: {},
-  },
-  stepFour: {
-    key: "step-4",
-    value: {},
-  },
 });
 const steps = ref<any>([
   {
@@ -165,16 +164,6 @@ const steps = ref<any>([
     key: "stepTwo",
     canClick: false,
     value: "step-2",
-  },
-  {
-    key: "stepThree",
-    canClick: false,
-    value: "step-3",
-  },
-  {
-    key: "stepFour",
-    canClick: false,
-    value: "step-4",
   },
 ]);
 
@@ -192,7 +181,6 @@ const disableStep = computed(() => {
   const currentStepIndex = steps.value.findIndex(
     (step: any) => step.value === currentStep.value
   );
-  console.log(currentStepIndex);
   const currentStepKey = steps.value[currentStepIndex].key;
 
   const currentStepValue = stepValues[currentStepKey];
@@ -205,6 +193,10 @@ const disableStep = computed(() => {
   );
   return hasValue;
 });
+function handleRegistrationInput(data: { email: string; password: string }) {
+  stepValues.stepTwo.value.email = data.email;
+  stepValues.stepTwo.value.password = data.password;
+}
 </script>
 
 <style>
