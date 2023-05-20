@@ -82,7 +82,7 @@
         </div>
         <div class="checkout-form flex-1">
           <FormTitle header="Payment" />
-          <p class="w-3/4 py-2">
+          <p class="w-3/4 py-2 simple">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Est ad
             quisquam eius ipsam eum recusandae.
           </p>
