@@ -23,6 +23,7 @@ interface IRoutes {
   meta?: {
     requiresAuth: boolean;
   };
+  beforeEnter?: any;
 }
 
 const routes: IRoutes[] = [
