@@ -88,19 +88,19 @@ const items = ref([
     title: "How does the 30-days free trial works?",
     content:
       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Expedita quas amet laboriosam necessitatibus, facere molestiae debitis ad ab nesciunt animi quam beatae doloremque aperiam, nostrum tempore quia laborum architecto dolores?",
-    // isOpen: false,
+    isOpen: false,
   },
   {
     title: "Why do you need my credit card for the free trial?",
     content:
       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Expedita quas amet laboriosam necessitatibus, facere molestiae debitis ad ab nesciunt animi quam beatae doloremque aperiam, nostrum tempore quia laborum architecto dolores?",
-    // isOpen: false,
+    isOpen: false,
   },
   {
     title: "How do I cancel my subscription if not satisfied?",
     content:
       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Expedita quas amet laboriosam necessitatibus, facere molestiae debitis ad ab nesciunt animi quam beatae doloremque aperiam, nostrum tempore quia laborum architecto dolores?",
-    // isOpen: false,
+    isOpen: false,
   },
 ]);
 
