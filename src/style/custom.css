@@ -1,3 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Anuphan&family=Roboto&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
 .not-found {
   display: flex;
   align-items: center;
@@ -149,4 +156,23 @@
 }
 .text-secondary {
   color: #072242;
+}
+
+.btn-primary {
+  padding: 1.012rem 3rem;
+  background-color: #434ce6;
+  outline: none;
+  color: #fff;
+  font-weight: 500;
+  border: none;
+  width: 100%;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-primary:disabled {
+  opacity: 0.4; /* Reduce opacity to indicate the button is disabled */
+  cursor: not-allowed; /* Change cursor to indicate the button is disabled */
+  /* Additional styling properties */
+  color: white; /* Set a different text color */
 }

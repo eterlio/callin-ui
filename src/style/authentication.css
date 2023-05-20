@@ -81,24 +81,6 @@
   flex: 1;
 }
 
-.submit button {
-  padding: 1.012rem 3rem;
-  background-color: #434ce6;
-  outline: none;
-  color: #fff;
-  font-weight: 500;
-  border: none;
-  width: 100%;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.submit button:disabled {
-  opacity: 0.6; /* Reduce opacity to indicate the button is disabled */
-  cursor: not-allowed; /* Change cursor to indicate the button is disabled */
-  /* Additional styling properties */
-  background-color: #434be623; /* Set a different background color */
-  color: white; /* Set a different text color */
-}
 .aside-container {
   flex: 1;
   background: #454;

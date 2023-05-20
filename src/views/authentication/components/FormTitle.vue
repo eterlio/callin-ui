@@ -1,7 +1,7 @@
 <template>
   <div class="title-container">
     <h1 class="text-primary">{{ header }}</h1>
-    <p class="text-sm">{{ paragraph }}:</p>
+    <p class="text-sm">{{ paragraph }}</p>
   </div>
 </template>
 

@@ -82,7 +82,11 @@
             </div>
             <!-- BUTTONS -->
             <div class="submit">
-              <button @click="validStepOneButtonClick" :disabled="!disableStep">
+              <button
+                @click="validStepOneButtonClick"
+                :disabled="!disableStep"
+                class="btn-primary"
+              >
                 {{ currentStep !== "step-1" ? "Register" : "Continue" }}
               </button>
             </div>

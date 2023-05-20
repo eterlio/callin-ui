@@ -9,7 +9,13 @@ import Login from "../views/authentication/Login.vue";
 import Register from "../views/authentication/Register.vue";
 import Dashboard from "../views/dashboard/Dashboard.vue";
 import Landing from "../views/Landing.vue";
+import Plan from "../views/plan/Plan.vue";
+import Checkout from "../views/plan/checkout/Checkout.vue";
 import NotFound from "../components/NotFound.vue";
+import {
+  BeforeEnterGuard,
+  beforeEnterCheckout,
+} from "./middleware/beforeEnter";
 interface IRoutes {
   path: string;
   name: string;
@@ -39,6 +45,17 @@ const routes: IRoutes[] = [
     path: "/auth/register",
     name: "Register",
     component: Register,
+  },
+  {
+    path: "/plan",
+    name: "Plan",
+    component: Plan,
+  },
+  {
+    path: "/checkout",
+    name: "Checkout",
+    component: Checkout,
+    beforeEnter: beforeEnterCheckout as BeforeEnterGuard,
   },
   {
     path: "/:catchAll(.*)",
