@@ -1,4 +1,6 @@
 import { defineStore } from "pinia";
+import axiosInstance from "../../axios/publicInstance";
+import { useUserStore } from "../users";
 interface AuthState {
   accessToken: string;
   refreshToken: string;
@@ -6,11 +8,6 @@ interface AuthState {
 
 interface AuthGetters {
   isAuthenticated: boolean;
-}
-
-interface AuthActions {
-  setTokens(accessToken: string, refreshToken: string): void;
-  clearTokens(): void;
 }
 
 export const useAuthStore = defineStore({
@@ -32,6 +29,33 @@ export const useAuthStore = defineStore({
     clearTokens(): void {
       this.accessToken = "";
       this.refreshToken = "";
+    },
+    async loginUser(email: string, password: string) {
+      const userStore = useUserStore();
+
+      try {
+        const response = await axiosInstance.post("/api/auth/login", {
+          email,
+          password,
+        });
+        const { response: responseData } = response.data;
+        userStore.setUser(responseData.user);
+        this.setTokens(
+          responseData.token.accessToken,
+          responseData.token.refreshToken
+        );
+        return response.data;
+      } catch (error: any) {
+        return { isValid: false, error: error.message };
+      }
+    },
+    async registerUser(data: {
+      email: string;
+      password: string;
+      role: string;
+    }) {
+      const response = await axiosInstance.post("/api/auth/register", data);
+      return response.data;
     },
   },
 });

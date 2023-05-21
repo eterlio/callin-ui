@@ -28,12 +28,12 @@
       <input
         @input="
           $emit('update:modelValue', ($event.target as HTMLInputElement).value),
-            $emit('increment', hasError)
+            $emit('hasErrors', inputHasErrors)
         "
         :value="modelValue"
         :class="{ 'is-invalid invalid-input': !inputHasErrors.isValid }"
         :style="{ width: width }"
-        :type="type"
+        :type="type === 'email' ? 'text' : type"
         class="input"
       />
       <small
@@ -48,8 +48,10 @@
 <script lang="ts" setup emits="increment">
 import { reactive, ref, watch } from "vue";
 import Icon from "../buttons/Icon.vue";
+import { Validator } from "../../validators/Validator";
 type inputTypes =
   | "text"
+  | "email"
   | "password"
   | "date"
   | "datetime"
@@ -66,36 +68,52 @@ interface IInput {
   width?: string;
   icon?: string;
 }
-defineEmits(["update:modelValue", "increment"]);
+defineEmits(["update:modelValue", "hasErrors"]);
 const props = defineProps<IInput>();
 const inputHasErrors = reactive({
   isValid: true,
   errorMessage: "",
 });
 const inputLabel = ref(props.label);
-const hasError = ref(false);
 watch(
   () => props.modelValue,
   () => {
     if (props.modelValue === "" && props.required) {
-      (inputHasErrors.isValid = false),
-        (inputHasErrors.errorMessage = `${
-          props.label ? `${props.label} is required` : "Input field is required"
-        }`);
-      hasError.value = true;
+      inputHasErrors.isValid = false;
+      inputHasErrors.errorMessage = `${
+        props.label ? `${props.label} is required` : "Input field is required"
+      }`;
       return;
+    } else if (
+      props.modelValue &&
+      props.type === "email" &&
+      !Validator.isEmail(props.modelValue as string)
+    ) {
+      inputHasErrors.isValid = false;
+      inputHasErrors.errorMessage = `Invalid email`;
+    } else if (
+      props.modelValue &&
+      props.type === "password" &&
+      !Validator.isValidPassword(props.modelValue as string)
+    ) {
+      inputHasErrors.isValid = false;
+      inputHasErrors.errorMessage = `
+      Password must be at least 8 characters long\n
+      Must contain at least one special character\n
+      Must contain at least one special uppercase character\n
+      Must contain at least one special lowercase character\n
+      Must contain at least one special number`;
     } else if (
       props.modelValue &&
       props.type === "number" &&
       isNaN(props.modelValue as number)
     ) {
-      (inputHasErrors.isValid = false),
-        (inputHasErrors.errorMessage = `Input should be a number`);
-      hasError.value = true;
+      inputHasErrors.isValid = false;
+      inputHasErrors.errorMessage = `Input should be a number`;
       return;
     } else {
-      (inputHasErrors.isValid = true), (inputHasErrors.errorMessage = ``);
-      hasError.value = false;
+      inputHasErrors.isValid = true;
+      inputHasErrors.errorMessage = ``;
       return;
     }
   }

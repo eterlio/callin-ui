@@ -11,12 +11,13 @@
 
     <div class="input-container">
       <Input
-        type="text"
+        type="email"
         label="Email"
         :required="true"
         width="100%"
         v-model="inputData.email"
         @input="$emit('sendRegistrationData', inputData)"
+        @hasErrors="(data:any)=>$emit('hasErrors', data)"
       />
     </div>
     <div class="input-container">
@@ -27,6 +28,7 @@
         width="100%"
         v-model="inputData.password"
         @input="$emit('sendRegistrationData', inputData)"
+        @hasErrors="(data:any)=>$emit('hasErrors', data)"
       />
     </div>
   </div>
@@ -38,6 +40,7 @@ import { reactive } from "vue";
 import ExternalAuth from "./ExternalAuth.vue";
 import LineWithText from "./LineWithText.vue";
 
+defineEmits(["sendRegistrationData", "hasErrors"]);
 const inputData = reactive({
   email: "",
   password: "",

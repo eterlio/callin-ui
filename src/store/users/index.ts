@@ -20,7 +20,9 @@ export interface IUser {
   firstName: string;
   lastName: string;
   gender: "male" | "female";
-  permission: number;
+  permission: {
+    access: number;
+  };
   physicalAddress: IAddress;
   mailingAddress: IAddress;
   belongsToOrg: boolean;
@@ -67,13 +69,13 @@ export interface IUserGetters {
   isInactive: boolean;
 }
 
-export const useUserStore = defineStore<IUserStore["id"]>({
+export const useUserStore = defineStore({
   id: "user",
   state: (): IUserState => ({
     currentUser: null,
   }),
   actions: {
-    setUser(this: IUserStore, user: IUser): void {
+    setUser(user: IUser): void {
       this.currentUser = user;
     },
     clearUser(this: IUserStore): void {
@@ -81,23 +83,8 @@ export const useUserStore = defineStore<IUserStore["id"]>({
     },
   },
   getters: {
-    isLoggedIn(state): boolean {
-      return !!(state as IUserState).currentUser;
-    },
-    isAdmin(state): boolean {
-      return (state as IUserState).currentUser?.role === "admin";
-    },
-    isSuperAdmin(state): boolean {
-      return (state as IUserState).currentUser?.role === "organizationadmin";
-    },
-    isPendingApproval(state): boolean {
-      return (state as IUserState).currentUser?.status === "pendingApproval";
-    },
-    isInactive(state): boolean {
-      return (state as IUserState).currentUser?.status === "inactive";
-    },
-    userPermissions(state): number {
-      return (state as IUserState).currentUser?.permission || 0;
+    userPermission(): number {
+      return this.currentUser?.permission.access as number;
     },
   },
 });

@@ -78,6 +78,7 @@
             <div v-if="currentStep === 'step-2'" class="registrationForm">
               <RegistrationForm
                 @sendRegistrationData="handleRegistrationInput"
+                @hasErrors="hasErrors"
               />
             </div>
             <!-- BUTTONS -->
@@ -86,8 +87,17 @@
                 @click="validStepOneButtonClick"
                 :disabled="!disableStep"
                 class="btn-primary"
+                v-if="currentStep === 'step-1'"
               >
-                {{ currentStep !== "step-1" ? "Register" : "Continue" }}
+                Continue
+              </button>
+              <button
+                @click="registerUser"
+                :disabled="!disableStep"
+                class="btn-primary"
+                v-if="currentStep === 'step-2'"
+              >
+                Register
               </button>
             </div>
             <div v-if="currentStep === 'step-3'"><h1>Step 3</h1></div>
@@ -131,7 +141,12 @@ import { computed, reactive, ref } from "vue";
 import Icon from "../../components/buttons/Icon.vue";
 import FormTitle from "./components/FormTitle.vue";
 import RegistrationForm from "./components/RegistrationForm.vue";
+import { useAuthStore } from "../../store/auth";
 const currentStep = ref("step-1");
+const inputErrors = ref({
+  errorMessage: "",
+  isValid: true,
+});
 type Steps = "step-1" | "step-2" | "step-3" | "step-4";
 interface StepValue {
   [key: string]: {
@@ -195,11 +210,28 @@ const disableStep = computed(() => {
   const hasValue = Object.values(currentStepValue.value).every(
     (value: any) => value !== ""
   );
-  return hasValue;
+  return hasValue && inputErrors.value.isValid;
 });
 function handleRegistrationInput(data: { email: string; password: string }) {
   stepValues.stepTwo.value.email = data.email;
   stepValues.stepTwo.value.password = data.password;
+}
+
+const hasErrors = (e: any) => {
+  inputErrors.value = e;
+};
+const authStore = useAuthStore();
+async function registerUser() {
+  try {
+    const result = await authStore.registerUser({
+      email: stepValues.stepTwo.value.email,
+      password: stepValues.stepTwo.value.password,
+      role: stepValues.stepOne.value,
+    });
+    console.info({ result });
+  } catch (error: any) {
+    console.log({ error });
+  }
 }
 </script>
 

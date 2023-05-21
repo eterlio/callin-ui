@@ -5,7 +5,9 @@
       class="content flex-grow flex items-center justify-between w-3/4 m-auto"
     >
       <div class="text-content">
-        <h2 class="text-red-600">Looks like you this page doesn't exist...</h2>
+        <h2 class="text-red-600">
+          Looks like you don't have permission to access this page...
+        </h2>
         <p class="text-lg text-gray-600 py-4">
           Let us guide you out of here back home
         </p>
@@ -16,7 +18,7 @@
         />
       </div>
       <div class="img">
-        <img src="/src/assets/404.gif" />
+        <img src="/src/assets/403.gif" />
       </div>
     </div>
   </div>

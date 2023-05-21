@@ -29,13 +29,10 @@
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  color: rgb(66, 82, 110) !important;
+  color: rgb(66, 82, 110);
   position: relative;
 }
 
-.bg-primary {
-  background: #1805db;
-}
 .btn-sm {
   color: #fff;
   border: none;
