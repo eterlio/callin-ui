@@ -2,7 +2,7 @@ import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import { useAuthStore } from "../store/auth/index";
 
 const axiosInstance = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
+  baseURL: import.meta.env.VITE_APP_API_URL,
   withCredentials: true,
 });
 

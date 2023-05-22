@@ -10,6 +10,7 @@
           </div>
           <div class="main-content">
             <div class="authForm">
+              <RouterLink to="/">Home</RouterLink>
               <LoginForm @sendLoginData="handleLoginInput" />
             </div>
             <!-- BUTTONS -->

@@ -9,8 +9,8 @@ import Register from "../views/authentication/Register.vue";
 import ForgotPassword from "../views/authentication/ForgotPassword.vue";
 import Dashboard from "../views/dashboard/Dashboard.vue";
 import Landing from "../views/Landing.vue";
-import Plan from "../views/plan/Plan.vue";
-import Checkout from "../views/plan/checkout/Checkout.vue";
+import Subscription from "../views/subscription/Subscription.vue";
+import Checkout from "../views/subscription/checkout/Checkout.vue";
 import NotFound from "../components/NotFound.vue";
 import AccessDenied from "../components/AccessDenied.vue";
 import {
@@ -66,12 +66,11 @@ const routes: IRoutes[] = [
     component: ForgotPassword,
   },
   {
-    path: "/plan",
-    name: "Plan",
-    component: Plan,
+    path: "/subscription",
+    name: "Subscription",
+    component: Subscription,
     meta: {
       requiresAuth: true,
-      permission: ["files", "create"],
     },
   },
   {

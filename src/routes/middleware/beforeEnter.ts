@@ -16,8 +16,8 @@ export function beforeEnterCheckout(
 ) {
   const subscriptionStore = useSubscriptionStore();
 
-  if (!subscriptionStore.getPlan) {
-    next("/plan");
+  if (!subscriptionStore.planId) {
+    next("/subscription");
   } else {
     next();
   }

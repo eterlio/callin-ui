@@ -1,41 +1,39 @@
 <template>
-  <div class="subscription">
+  <div class="plan">
     <div class="circle-container">
       <div class="circle">
         <div class="inner"></div>
       </div>
     </div>
     <div class="content">
-      <h3>{{ subscription.name }}</h3>
-      <p>{{ subscription.description }}</p>
+      <h3>{{ name }}</h3>
+      <p>{{ description }}</p>
     </div>
     <div class="pricing font-bold text-primary">
       <p class="current-price" style="width: 100px">
-        &#8373;{{ subscription.currentAmount }} /mo.
+        &#8373;{{ currentPrice }} /mo.
       </p>
       <p
         class="old-price flex justify-center items-center text-gray-400 text-sm line-through"
-        v-if="subscription.previousAmount > 0"
+        v-if="previousPrice > 0"
       >
-        &#8373;{{ subscription.previousAmount }}/mo.
+        &#8373;{{ previousPrice }}/mo.
       </p>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-interface Subscription {
-  subscription: {
-    id: string;
-    name: string;
-    description: string;
-    currentAmount: number;
-    previousAmount: number;
-  };
+export interface Plan {
+  id: string | null;
+  name: string;
+  description: string;
+  previousPrice: number;
+  currentPrice: number;
 }
-defineProps<Subscription>();
+defineProps<Plan>();
 </script>
 <style scoped>
-.subscription {
+.plan {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
@@ -47,10 +45,10 @@ defineProps<Subscription>();
   cursor: pointer;
   transition: border-color 0.3s ease-out;
 }
-.subscription.active {
+.plan.active {
   border-color: #434ce6;
 }
-.subscription .circle-container {
+.plan .circle-container {
   display: flex;
   margin-right: 0.5rem;
 }
@@ -64,7 +62,7 @@ defineProps<Subscription>();
   justify-content: center;
   transition: border-color 0.3s ease-out;
 }
-.subscription.active .circle-container .circle {
+.plan.active .circle-container .circle {
   border-color: #434ce6;
 }
 .circle-container .circle .inner {
@@ -74,12 +72,12 @@ defineProps<Subscription>();
   background: transparent;
   transition: border-color 0.3s ease-out;
 }
-.subscription.active .circle-container .circle .inner {
+.plan.active .circle-container .circle .inner {
   background-color: #434ce6;
 }
 
 @media (max-width: 840px) {
-  .subscription {
+  .plan {
     flex-direction: column;
     gap: 0.5rem;
   }

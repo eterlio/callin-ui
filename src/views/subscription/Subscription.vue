@@ -26,20 +26,24 @@
               paragraph=""
               class="subscription-header hidden"
             />
-            <div v-for="(subscription, index) in subscriptions" :key="index">
-              <Subscription
-                :subscription="subscription"
-                @click="handleSelectedSubscription(subscription)"
+            <div v-for="(plan, index) in allPlans" :key="index">
+              <Plan
+                :id="plan.id"
+                :name="plan.name"
+                :current-price="plan.currentPrice"
+                :description="plan.description"
+                :previous-price="plan.previousPrice"
+                @click="handleSelectedSubscription(plan.id as string)"
                 :class="{
-                  active: subscriptionStore?.plan?.name === subscription.name,
+                  active: plan.id === subscriptionStore.planId,
                 }"
               />
             </div>
             <div class="submit">
               <button
                 class="btn-primary"
-                :disabled="!Boolean(subscriptionStore?.plan)"
-                @click="handlePlan"
+                :disabled="!subscriptionStore.planId"
+                @click="handlePlanSelected"
               >
                 Continue
               </button>
@@ -76,11 +80,12 @@
 </template>
 <script setup lang="ts">
 import FormTitle from "../authentication/components/FormTitle.vue";
-import Subscription from "./component/Subscription.vue";
+import Plan from "./component/Plan.vue";
 import Accordion from "../../components/Accordion.vue";
 import { ref } from "vue";
-import { useSubscriptionStore, Plan } from "../../store/subscription";
+import { useSubscriptionStore } from "../../store/subscription";
 import { useRouter } from "vue-router";
+import { Plan as IPlan, usePlanStore } from "../../store/plan";
 const router = useRouter();
 const subscriptionStore = useSubscriptionStore();
 const items = ref([
@@ -104,37 +109,22 @@ const items = ref([
   },
 ]);
 
-const subscriptions = ref([
-  {
-    id: String(Math.floor(Math.random() * 40000000)),
-    name: "Starter",
-    description:
-      "  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum, dolores?",
-    currentAmount: 23.4,
-    previousAmount: 0,
-  },
-  {
-    id: String(Math.floor(Math.random() * 40000000)),
-    name: "Standard",
-    description:
-      "  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum, dolores?",
-    currentAmount: 25.7,
-    previousAmount: 0,
-  },
-  {
-    id: String(Math.floor(Math.random() * 40000000)),
-    name: "Pro",
-    description:
-      "  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorum, dolores?",
-    currentAmount: 23.8,
-    previousAmount: 45.1,
-  },
-]);
+const allPlans = ref<IPlan[]>();
 
-const handleSelectedSubscription = (plan: Plan) => {
-  subscriptionStore.setPlan(plan);
+const handleSelectedSubscription = (id: string) => {
+  subscriptionStore.setPlan(id);
 };
-const handlePlan = () => {
+const handlePlanSelected = () => {
   router.push("/checkout");
 };
+
+const usePlan = usePlanStore();
+const getPlans = async () => {
+  try {
+    const { plans } = await usePlan.getPlans();
+    allPlans.value = plans;
+    console.group(plans);
+  } catch (error) {}
+};
+getPlans();
 </script>

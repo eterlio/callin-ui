@@ -1,49 +1,46 @@
+import axiosInstance from "../../axios/protectedInstance";
+import { PaymentDetails, PaymentType } from "./../payment";
 import { defineStore } from "pinia";
 
 interface Subscription {
   coupon?: string;
-  plan: Plan | null;
-}
-
-export interface Plan {
-  id: string;
-  name: string;
-  description: string;
-  currentAmount: number;
-  previousAmount: number;
+  planId: string | null;
 }
 
 // Store
 export const useSubscriptionStore = defineStore({
   id: "subscription",
   state: (): Subscription => ({
-    plan: null,
+    planId: null,
     coupon: "",
   }),
 
   actions: {
-    setPlan(plan: Plan) {
-      this.plan = plan;
+    setPlan(planId: string) {
+      this.planId = planId;
     },
     setCoupon(coupon: string) {
       this.coupon = coupon;
     },
-
-    createSubscription(): Subscription {
-      const subscription = { coupon: this.coupon, plan: this.plan };
-      return subscription;
+    async createSubscription(data: {
+      details: PaymentDetails;
+      paymentType: PaymentType;
+    }) {
+      const subscription = {
+        coupon: this.coupon,
+        planId: this.planId,
+        subscriberDetails: data.details,
+        paymentType: data.paymentType,
+      };
+      try {
+        const { data } = await axiosInstance.post(
+          "/api/subscription/pay",
+          subscription
+        );
+        console.log(data);
+      } catch (error) {}
     },
   },
 
-  getters: {
-    currentSubscriptionAmount(): number {
-      return this.plan?.currentAmount || 0;
-    },
-    subscriptionName(): string {
-      return this.plan?.name || "";
-    },
-    getPlan(): Boolean {
-      return Boolean(this.plan);
-    },
-  },
+  getters: {},
 });

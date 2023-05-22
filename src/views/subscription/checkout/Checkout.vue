@@ -36,9 +36,7 @@
             <p class="text-primary font-semibold">You have to pay:</p>
             <div class="my-4">
               <FormTitle
-                :header="`&#8373;${subscriptionStore.currentSubscriptionAmount.toFixed(
-                  2
-                )}`"
+                :header="`&#8373;${selectedPlan?.currentPrice.toFixed(2)}`"
               />
             </div>
             <div class="py-6">
@@ -66,8 +64,7 @@
                 </div>
                 <div class="text">
                   <h5 class="primary-text mb-2">
-                    Yearly {{ subscriptionStore.subscriptionName }} Subscription
-                    Plan
+                    Yearly {{ selectedPlan?.name }} Subscription Plan
                   </h5>
                   <p
                     class="w-3/4 simple from-neutral-700 font-medium text-gray-600"
@@ -99,6 +96,7 @@
             <button
               class="btn-primary text-center"
               :disabled="payButtonDisabled"
+              @click="handleCreateSubscription"
             >
               Pay Now
             </button>
@@ -130,11 +128,18 @@ import {
   PaymentDetails,
 } from "../../../store/payment";
 import Input from "../../../components/inputs/Input.vue";
-import { camelize, capitalize, computed, ref } from "vue";
+import { camelize, capitalize, computed, reactive, ref } from "vue";
 import MobileMoneyForm from "./MobileMoneyForm.vue";
 import CreditCardForm from "./CreditCardForm.vue";
+import { Plan, usePlanStore } from "../../../store/plan";
 
-const discount = ref("");
+const subscriptionStore = useSubscriptionStore();
+const planStore = usePlanStore();
+
+const selectedPlan = planStore.allPlans.find(
+  (plan: Plan) => plan.id === subscriptionStore.planId
+);
+
 const paymentTypes = ref<
   {
     icon: string;
@@ -154,7 +159,6 @@ const paymentTypes = ref<
 const router = useRouter();
 const formRef = ref<any>(null);
 formRef.value?.scrollIntoView({ behavior: "smooth" });
-const subscriptionStore = useSubscriptionStore();
 const paymentStore = usePaymentStore();
 const handlePaymentType = (type: PaymentType) => {
   paymentStore.setPaymentType(type);
@@ -174,6 +178,14 @@ const payButtonDisabled = computed(() => {
     )
   );
 });
+const handleCreateSubscription = async () => {
+  const paymentDetails = paymentStore.details;
+  const subscriptionCreate = await subscriptionStore.createSubscription({
+    details: paymentDetails as PaymentDetails,
+    paymentType: paymentStore.type,
+  });
+  console.log(subscriptionCreate);
+};
 </script>
 <style scoped>
 .main-content {
