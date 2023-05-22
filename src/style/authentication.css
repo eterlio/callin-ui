@@ -83,7 +83,12 @@
 
 .aside-container {
   flex: 1;
-  background: #454;
+  background: #f3f4f8;
+}
+.aside-container .aside-inner {
+  height: 85%;
+  padding: 2rem;
+  width: 100%;
 }
 
 @media screen and (max-width: 960px) {

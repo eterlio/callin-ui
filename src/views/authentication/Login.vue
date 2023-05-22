@@ -40,7 +40,18 @@
           </div>
         </div>
       </div>
-      <div class="aside-container"></div>
+      <div class="aside-container flex justify-end items-end flex-col">
+        <div class="aside-inner">
+          <h1 class="text-primary py-4">
+            Let us help you run your organization
+          </h1>
+          <p class="text-justify w-3/4">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui ut
+            veritatis voluptate aut, sunt tenetur odit quaerat alias mollitia
+            dicta.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -83,3 +94,8 @@ async function login() {
   }
 }
 </script>
+
+<style>
+.aside-container {
+}
+</style>
