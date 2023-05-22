@@ -133,6 +133,8 @@ import MobileMoneyForm from "./MobileMoneyForm.vue";
 import CreditCardForm from "./CreditCardForm.vue";
 import { Plan, usePlanStore } from "../../../store/plan";
 
+//TODO - If user already has a subscription, redirect them. do this before mount
+
 const subscriptionStore = useSubscriptionStore();
 const planStore = usePlanStore();
 

@@ -109,6 +109,8 @@ const items = ref([
   },
 ]);
 
+//TODO - CHeck if client already has a subscription(do this in the backend as well, make that the current subscription)
+
 const allPlans = ref<IPlan[]>();
 
 const handleSelectedSubscription = (id: string) => {
