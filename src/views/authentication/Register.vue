@@ -14,6 +14,7 @@
               >
             </div>
           </div>
+          <RouterLink to="/">Home</RouterLink>
           <div class="main-content">
             <div
               class="account-type__container"
