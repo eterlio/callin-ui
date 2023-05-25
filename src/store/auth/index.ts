@@ -26,6 +26,9 @@ export const useAuthStore = defineStore({
       this.accessToken = accessToken;
       this.refreshToken = refreshToken;
     },
+    setAccessToken(accessToken: string): void {
+      this.accessToken = accessToken;
+    },
     clearTokens(): void {
       this.accessToken = "";
       this.refreshToken = "";

@@ -1,6 +1,6 @@
+import axiosInstance from "../axios/publicInstance";
 import { useAuthStore } from "../store/auth/index";
 import { useRouter } from "vue-router";
-import axiosInstance from "../axios/protectedInstance";
 
 export function useAuth() {
   const authStore = useAuthStore();

@@ -1,52 +1,60 @@
-import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import { AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import { useAuthStore } from "../store/auth/index";
+import axiosInstance from "./publicInstance";
+import { useRefreshToken } from "../composables/useRefreshToken";
 
-const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_APP_API_URL,
-  withCredentials: true,
-});
+const { refresh } = useRefreshToken();
+const useAxiosPrivate = () => {
+  let isRefreshing = false;
+  let refreshPromise: Promise<string> | null = null;
 
-axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const authStore = useAuthStore();
-
-  if (authStore.accessToken) {
-    (config as any).headers.Authorization = `Bearer ${authStore.accessToken}`;
-  }
-
-  return config;
-});
-
-axiosInstance.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  async (error) => {
-    const authStore = useAuthStore();
-
-    const originalRequest = error.config;
-
-    if (
-      error.response.status === 401 &&
-      !originalRequest._retry &&
-      authStore.refreshToken
-    ) {
-      originalRequest._retry = true;
-
-      try {
-        const { data } = await axiosInstance.post("/refresh-token", {
-          refresh_token: authStore.refreshToken,
-        });
-
-        authStore.setTokens(data.accessToken, data.refreshToken);
-
-        return axiosInstance(originalRequest);
-      } catch (error) {
-        authStore.clearTokens();
-
-        throw error;
+  axiosInstance.interceptors.request.use(
+    (config: InternalAxiosRequestConfig) => {
+      config.withCredentials = true;
+      const authStore = useAuthStore();
+      if (authStore.accessToken) {
+        config.headers.Authorization = `Bearer ${authStore.accessToken}`;
       }
+
+      return config;
     }
+  );
 
-    throw error;
-  }
-);
+  axiosInstance.interceptors.response.use(
+    (response: AxiosResponse) => response,
+    async (error) => {
+      const authStore = useAuthStore();
+      const prevRequest = error?.config;
+      if (error?.response?.status === 401 && !prevRequest?.sent) {
+        if (!isRefreshing) {
+          isRefreshing = true;
+          refreshPromise = refresh()
+            .then((newAccessToken) => {
+              authStore.setAccessToken(newAccessToken);
+              isRefreshing = false;
+              refreshPromise = null;
+              return newAccessToken;
+            })
+            .catch((err) => {
+              console.log("I came here");
+            });
+        }
 
-export default axiosInstance;
+        if (refreshPromise) {
+          await refreshPromise;
+          prevRequest.sent = true;
+          prevRequest.headers[
+            "Authorization"
+          ] = `Bearer ${authStore.accessToken}`;
+          return axiosInstance(prevRequest);
+        }
+      }
+
+      return Promise.reject(error);
+    }
+  );
+
+  return axiosInstance;
+};
+
+export default useAxiosPrivate;

@@ -13,8 +13,8 @@ import { createPinia } from "pinia";
 import { Row, Column, Hidden } from "vue-grid-responsive";
 import VueApexCharts from "vue3-apexcharts";
 
-const app = createApp(App);
 const pinia = createPinia();
+const app = createApp(App);
 app.component(VueFeather.name, VueFeather);
 app.component("EasyDataTable", Vue3EasyDataTable);
 app.component("row", Row);

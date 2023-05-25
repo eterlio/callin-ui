@@ -1,7 +1,9 @@
+import useAxiosPrivate from "../../axios/protectedInstance";
 import axiosInstance from "../../axios/protectedInstance";
 import { PaymentDetails, PaymentType } from "./../payment";
 import { defineStore } from "pinia";
 
+const { post } = useAxiosPrivate();
 interface Subscription {
   coupon?: string;
   planId: string | null;
@@ -33,10 +35,7 @@ export const useSubscriptionStore = defineStore({
         paymentType: data.paymentType,
       };
       try {
-        const { data } = await axiosInstance.post(
-          "/api/subscription/pay",
-          subscription
-        );
+        const { data } = await post("/api/subscription/pay", subscription);
         console.log(data);
       } catch (error) {}
     },

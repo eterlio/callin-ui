@@ -24,6 +24,7 @@ import {
   hasPermission,
 } from "../middleware/hasPermission";
 import { useUserStore } from "../store/users";
+import { getRequest } from "../axios/privateRequest";
 
 interface IRoutes {
   path: string;
@@ -99,32 +100,54 @@ const router = createRouter({
   routes,
 });
 
+const checkAuthentication = async () => {
+  try {
+    const {
+      data: { response },
+    } = await getRequest("/api/auth");
+    useUserStore().setUser(response.user);
+    return Boolean(response.user);
+  } catch (error: any) {
+    console.log({ error: error.message });
+  }
+};
 router.beforeEach(
   async (
     to: RouteLocationNormalized,
     from: RouteLocationNormalized,
     next: NavigationGuardNext
   ) => {
-    const requiresAuth = to.meta?.requiresAuth;
-    const isAuthenticated = useAuthStore().isAuthenticated;
-    const userPermission = useUserStore().userPermission;
-    const canNotAccess = Boolean(requiresAuth && !isAuthenticated);
-    const canAccess = Boolean(requiresAuth && isAuthenticated);
-    const permission = to.meta?.permission as [
-      PermissionString,
-      PermissionOperation
-    ];
-    if (canNotAccess) {
-      next({ name: "Login" });
-    } else if (
-      canAccess &&
-      to.meta.permission &&
-      !hasPermission(userPermission, permission)
-    ) {
-      next({ name: "AccessDenied" });
-    } else {
-      console.log({ canAccess });
-      next();
+    try {
+      // console.log(to);
+      // if(["Login", ""].includes(to.name))
+      const authenticatedFromApi = await checkAuthentication();
+      console.log(authenticatedFromApi);
+      const requiresAuth = to.meta?.requiresAuth;
+      const isAuthenticated =
+        useAuthStore().isAuthenticated && authenticatedFromApi;
+      const userPermission = useUserStore().userPermission;
+      const canNotAccess = Boolean(requiresAuth && !isAuthenticated);
+      const canAccess = Boolean(requiresAuth && isAuthenticated);
+      const permission = to.meta?.permission as [
+        PermissionString,
+        PermissionOperation
+      ];
+
+      if (requiresAuth) {
+        if (canNotAccess) {
+          next({ name: "Login" });
+        } else if (
+          canAccess &&
+          to.meta.permission &&
+          !hasPermission(userPermission, permission)
+        ) {
+          next({ name: "AccessDenied" });
+        } else {
+          next();
+        }
+      } else next();
+    } catch (error) {
+      console.log("error");
     }
   }
 );

@@ -86,6 +86,7 @@ import { ref } from "vue";
 import { useSubscriptionStore } from "../../store/subscription";
 import { useRouter } from "vue-router";
 import { Plan as IPlan, usePlanStore } from "../../store/plan";
+import { getRequest } from "../../axios/privateRequest";
 const router = useRouter();
 const subscriptionStore = useSubscriptionStore();
 const items = ref([
@@ -124,6 +125,7 @@ const usePlan = usePlanStore();
 const getPlans = async () => {
   try {
     const { plans } = await usePlan.getPlans();
+    await getRequest("/api/getToken");
     allPlans.value = plans;
     console.group(plans);
   } catch (error) {}
