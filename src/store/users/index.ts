@@ -36,6 +36,7 @@ export interface IUser {
   updatedBy: string;
   createdAt: Date;
   updateAt: Date;
+  subscription: any;
 }
 export interface IAddress {
   houseNumber: string;

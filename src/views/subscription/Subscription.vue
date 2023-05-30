@@ -86,9 +86,11 @@ import { ref } from "vue";
 import { useSubscriptionStore } from "../../store/subscription";
 import { useRouter } from "vue-router";
 import { Plan as IPlan, usePlanStore } from "../../store/plan";
-import { getRequest } from "../../axios/privateRequest";
+import { postRequest } from "../../axios/privateRequest";
+import { useUserStore } from "../../store/users";
 const router = useRouter();
 const subscriptionStore = useSubscriptionStore();
+const userStore = useUserStore();
 const items = ref([
   {
     title: "How does the 30-days free trial works?",
@@ -117,18 +119,25 @@ const allPlans = ref<IPlan[]>();
 const handleSelectedSubscription = (id: string) => {
   subscriptionStore.setPlan(id);
 };
-const handlePlanSelected = () => {
-  router.push("/checkout");
+const handlePlanSelected = async () => {
+  if (userStore?.currentUser?.subscription.planId) {
+    router.push("/checkout");
+  } else {
+    await postRequest("/api/subscription/create", {
+      planId: subscriptionStore.planId,
+    });
+    router.push("/checkout");
+  }
 };
 
 const usePlan = usePlanStore();
 const getPlans = async () => {
   try {
     const { plans } = await usePlan.getPlans();
-    await getRequest("/api/getToken");
     allPlans.value = plans;
     console.group(plans);
   } catch (error) {}
 };
 getPlans();
+subscriptionStore.setPlan(userStore?.currentUser?.subscription.planId);
 </script>

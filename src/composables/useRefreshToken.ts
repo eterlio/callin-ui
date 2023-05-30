@@ -2,14 +2,10 @@ import axiosInstance from "../axios/publicInstance";
 
 export function useRefreshToken() {
   async function refresh() {
-    let {
-      data: {
-        response: { accessToken },
-      },
-    } = await axiosInstance.get("/api/auth/refresh", {
+    const response = await axiosInstance.get("/api/auth/refresh", {
       withCredentials: true,
     });
-    return accessToken;
+    return response.data.response.accessToken;
   }
 
   return {

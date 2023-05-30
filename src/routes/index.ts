@@ -100,15 +100,16 @@ const router = createRouter({
   routes,
 });
 
-const checkAuthentication = async () => {
+const checkAuthentication = async (next: any) => {
   try {
-    const {
-      data: { response },
-    } = await getRequest("/api/auth");
-    useUserStore().setUser(response.user);
-    return Boolean(response.user);
+    const response = await getRequest("/api/auth");
+
+    console.log({ response });
+    useUserStore().setUser(response.data.response.user);
+    return false;
   } catch (error: any) {
-    console.log({ error: error.message });
+    next({ name: "Login" }); // Redirect the user to the login screen
+    console.log({ error1: error });
   }
 };
 router.beforeEach(
@@ -117,27 +118,24 @@ router.beforeEach(
     from: RouteLocationNormalized,
     next: NavigationGuardNext
   ) => {
-    try {
-      // console.log(to);
-      // if(["Login", ""].includes(to.name))
-      const authenticatedFromApi = await checkAuthentication();
-      console.log(authenticatedFromApi);
-      const requiresAuth = to.meta?.requiresAuth;
-      const isAuthenticated =
-        useAuthStore().isAuthenticated && authenticatedFromApi;
-      const userPermission = useUserStore().userPermission;
-      const canNotAccess = Boolean(requiresAuth && !isAuthenticated);
-      const canAccess = Boolean(requiresAuth && isAuthenticated);
-      const permission = to.meta?.permission as [
-        PermissionString,
-        PermissionOperation
-      ];
+    const requiresAuth = !!(
+      Object.keys(to.meta).length && to.meta?.requiresAuth
+    );
 
-      if (requiresAuth) {
-        if (canNotAccess) {
+    const isAuthenticated = useAuthStore().isAuthenticated;
+    const userPermission = useUserStore().userPermission;
+    const permission = to.meta?.permission as [
+      PermissionString,
+      PermissionOperation
+    ];
+
+    if (requiresAuth) {
+      try {
+        const authenticatedFromApi = await checkAuthentication(next);
+        if (!isAuthenticated && authenticatedFromApi) {
           next({ name: "Login" });
         } else if (
-          canAccess &&
+          isAuthenticated &&
           to.meta.permission &&
           !hasPermission(userPermission, permission)
         ) {
@@ -145,9 +143,12 @@ router.beforeEach(
         } else {
           next();
         }
-      } else next();
-    } catch (error) {
-      console.log("error");
+      } catch (error) {
+        console.log(error); // Log the error for debugging purposes
+        next({ name: "Login" }); // Redirect the user to the login screen
+      }
+    } else {
+      next();
     }
   }
 );
