@@ -24,20 +24,21 @@ export const useSubscriptionStore = defineStore({
     setCoupon(coupon: string) {
       this.coupon = coupon;
     },
-    async createSubscription(data: {
+    async createSubscription(payload: {
       details: PaymentDetails;
       paymentType: PaymentType;
     }) {
       const subscription = {
         coupon: this.coupon,
         planId: this.planId,
-        subscriberDetails: data.details,
-        paymentType: data.paymentType,
+        subscriberDetails: payload.details,
+        paymentType: payload.paymentType,
       };
-      try {
-        const { data } = await post("/api/subscription/pay", subscription);
-        console.log(data);
-      } catch (error) {}
+      const { data } = await post(
+        "/api/subscription/initialize/payment",
+        subscription
+      );
+      return data;
     },
   },
 

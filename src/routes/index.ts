@@ -106,11 +106,8 @@ const checkAuthentication = async (next: any) => {
 
     console.log({ response });
     useUserStore().setUser(response.data.response.user);
-    return false;
-  } catch (error: any) {
-    next({ name: "Login" }); // Redirect the user to the login screen
-    console.log({ error1: error });
-  }
+    return !!response.data.response.user;
+  } catch (error: any) {}
 };
 router.beforeEach(
   async (
@@ -132,10 +129,11 @@ router.beforeEach(
     if (requiresAuth) {
       try {
         const authenticatedFromApi = await checkAuthentication(next);
-        if (!isAuthenticated && authenticatedFromApi) {
+        if (!isAuthenticated && !authenticatedFromApi) {
           next({ name: "Login" });
         } else if (
           isAuthenticated &&
+          authenticatedFromApi &&
           to.meta.permission &&
           !hasPermission(userPermission, permission)
         ) {
@@ -144,7 +142,6 @@ router.beforeEach(
           next();
         }
       } catch (error) {
-        console.log(error); // Log the error for debugging purposes
         next({ name: "Login" }); // Redirect the user to the login screen
       }
     } else {

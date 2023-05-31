@@ -25,6 +25,7 @@
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/faker": "^6.6.9",
+    "@types/lodash": "^4.14.195",
     "@types/node": "^18.15.3",
     "@types/vue-router": "^2.0.0",
     "@vitejs/plugin-vue": "^4.1.0",

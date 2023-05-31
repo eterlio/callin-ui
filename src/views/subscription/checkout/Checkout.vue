@@ -93,13 +93,13 @@
               v-if="paymentStore.type === 'credit card'"
               @sendCreditCardData="handlePayment"
             />
-            <button
+            <Button
               class="btn-primary text-center"
-              :disabled="payButtonDisabled"
+              :is-valid="payButtonDisabled"
               @click="handleCreateSubscription"
-            >
-              Pay Now
-            </button>
+              :loading="loading"
+              text="Pay Now"
+            />
           </div>
         </div>
       </div>
@@ -116,6 +116,33 @@
       </div>
     </div>
   </div>
+
+  <!-- MODAL FOR AUTHORIZATION -->
+  <Modal
+    :description="chargeAttempted.display_text"
+    :title="'Payment Authorization'"
+    :buttons="authorizationButtons"
+    v-if="chargeAttempted.status === 'pay_offline'"
+    size="full"
+    :removeCloseButton="true"
+  />
+
+  <!-- MODAL FOR NUMBER AUTHENTICATION -->
+  <Modal
+    :description="'Enter the otp sent to your phone to verify your number'"
+    :title="'Account Verification'"
+    :buttons="authenticationButtons"
+    size="full"
+  >
+    <Input
+      type="text"
+      label="OTP"
+      :required="true"
+      width="100%"
+      v-model="accountVerificationInput"
+      :hideCloseButton="true"
+    />
+  </Modal>
 </template>
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
@@ -127,14 +154,15 @@ import {
   PaymentType,
   PaymentDetails,
 } from "../../../store/payment";
-import Input from "../../../components/inputs/Input.vue";
 import { camelize, capitalize, computed, reactive, ref } from "vue";
 import MobileMoneyForm from "./MobileMoneyForm.vue";
 import CreditCardForm from "./CreditCardForm.vue";
 import { Plan, usePlanStore } from "../../../store/plan";
+import Modal from "../../../components/modals/Modal.vue";
+import Button from "../../../components/buttons/Button.vue";
+import Input from "../../../components/inputs/Input.vue";
 
-//TODO - If user already has a subscription, redirect them. do this before mount
-
+const loading = ref<boolean>(false);
 const subscriptionStore = useSubscriptionStore();
 const planStore = usePlanStore();
 
@@ -160,6 +188,22 @@ const paymentTypes = ref<
 ]);
 const router = useRouter();
 const formRef = ref<any>(null);
+type ChargeDataStatus =
+  | "pay_offline"
+  | "send_pin"
+  | "send_address"
+  | "send_otp"
+  | "send_address"
+  | "send_birthday";
+const chargeAttempted = reactive<{
+  reference: string;
+  display_text: string;
+  status: ChargeDataStatus | string;
+}>({
+  reference: "",
+  display_text: "",
+  status: "",
+});
 formRef.value?.scrollIntoView({ behavior: "smooth" });
 const paymentStore = usePaymentStore();
 const handlePaymentType = (type: PaymentType) => {
@@ -181,13 +225,39 @@ const payButtonDisabled = computed(() => {
   );
 });
 const handleCreateSubscription = async () => {
-  const paymentDetails = paymentStore.details;
-  const subscriptionCreate = await subscriptionStore.createSubscription({
-    details: paymentDetails as PaymentDetails,
-    paymentType: paymentStore.type,
-  });
-  console.log(subscriptionCreate);
+  loading.value = true;
+  try {
+    const paymentDetails = paymentStore.details;
+    const subscriptionCreate = await subscriptionStore.createSubscription({
+      details: paymentDetails as PaymentDetails,
+      paymentType: paymentStore.type,
+    });
+    const response = subscriptionCreate.response.data;
+    chargeAttempted.display_text = response.display_text;
+    chargeAttempted.reference = response.reference;
+    chargeAttempted.status = response.status;
+  } catch (error) {
+  } finally {
+    loading.value = false;
+  }
 };
+
+const accountVerificationInput = ref("");
+const authorizationButtons = [
+  {
+    title: "Cancel",
+  },
+  {
+    title: "Done",
+    className: "!bg-gray-600 !text-white",
+  },
+];
+const authenticationButtons = [
+  {
+    title: "Confirm",
+    className: "btn-primary w-full",
+  },
+];
 </script>
 <style scoped>
 .main-content {

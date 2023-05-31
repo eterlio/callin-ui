@@ -16,7 +16,7 @@
             <!-- BUTTONS -->
             <div class="submit">
               <Button
-                class="btn-primary"
+                class="btn-primary btn"
                 @click="login"
                 text="Login"
                 :loading="loading"

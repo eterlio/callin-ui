@@ -10,7 +10,7 @@ const useAxiosPrivate = () => {
 
   axiosInstance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-      config.withCredentials = true;
+      // config.withCredentials = true;
       const authStore = useAuthStore();
       if (authStore.accessToken) {
         config.headers.Authorization = `Bearer ${authStore.accessToken}`;
@@ -36,7 +36,7 @@ const useAxiosPrivate = () => {
               return newAccessToken;
             })
             .catch((err) => {
-              console.log("I came here");
+              // console.log("I came here");
             });
         }
 

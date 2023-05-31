@@ -88,6 +88,7 @@ import { useRouter } from "vue-router";
 import { Plan as IPlan, usePlanStore } from "../../store/plan";
 import { postRequest } from "../../axios/privateRequest";
 import { useUserStore } from "../../store/users";
+import { get } from "lodash";
 const router = useRouter();
 const subscriptionStore = useSubscriptionStore();
 const userStore = useUserStore();
@@ -115,12 +116,14 @@ const items = ref([
 //TODO - CHeck if client already has a subscription(do this in the backend as well, make that the current subscription)
 
 const allPlans = ref<IPlan[]>();
+const planId = get(userStore?.currentUser, "subscription.planId", "");
 
 const handleSelectedSubscription = (id: string) => {
+  console.log({ id });
   subscriptionStore.setPlan(id);
 };
 const handlePlanSelected = async () => {
-  if (userStore?.currentUser?.subscription.planId) {
+  if (planId) {
     router.push("/checkout");
   } else {
     await postRequest("/api/subscription/create", {
@@ -139,5 +142,5 @@ const getPlans = async () => {
   } catch (error) {}
 };
 getPlans();
-subscriptionStore.setPlan(userStore?.currentUser?.subscription.planId);
+subscriptionStore.setPlan(planId);
 </script>

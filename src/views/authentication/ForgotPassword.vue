@@ -20,7 +20,7 @@
             </div>
             <!-- BUTTONS -->
             <div class="submit">
-              <button class="btn-primary" :disabled="disableButton">
+              <button class="btn-primary btn" :disabled="disableButton">
                 Send
               </button>
             </div>

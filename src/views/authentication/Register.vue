@@ -95,7 +95,7 @@
               <button
                 @click="registerUser"
                 :disabled="!disableStep"
-                class="btn-primary"
+                class="btn-primary btn w-full"
                 v-if="currentStep === 'step-2'"
               >
                 Register
