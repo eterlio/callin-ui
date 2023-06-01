@@ -129,14 +129,25 @@
 
   <!-- MODAL FOR NUMBER AUTHENTICATION -->
   <Modal
-    :description="'Enter the otp sent to your phone to verify your number'"
+    :description="`Enter the ${
+      modalLabels[chargeAttempted.status]
+    } sent to your phone to verify your card`"
     :title="'Account Verification'"
     :buttons="authenticationButtons"
     size="full"
+    v-if="
+      [
+        'send_pin',
+        'send_address',
+        'send_otp',
+        'send_address',
+        'send_birthday',
+      ].includes(chargeAttempted.status)
+    "
   >
     <Input
       type="text"
-      label="OTP"
+      :label="`ENTER ${modalLabels[chargeAttempted.status]}`"
       :required="true"
       width="100%"
       v-model="accountVerificationInput"
@@ -161,6 +172,7 @@ import { Plan, usePlanStore } from "../../../store/plan";
 import Modal from "../../../components/modals/Modal.vue";
 import Button from "../../../components/buttons/Button.vue";
 import Input from "../../../components/inputs/Input.vue";
+import { postRequest } from "../../../axios/privateRequest";
 
 const loading = ref<boolean>(false);
 const subscriptionStore = useSubscriptionStore();
@@ -189,6 +201,7 @@ const paymentTypes = ref<
 const router = useRouter();
 const formRef = ref<any>(null);
 type ChargeDataStatus =
+  | "default"
   | "pay_offline"
   | "send_pin"
   | "send_address"
@@ -198,11 +211,11 @@ type ChargeDataStatus =
 const chargeAttempted = reactive<{
   reference: string;
   display_text: string;
-  status: ChargeDataStatus | string;
+  status: ChargeDataStatus;
 }>({
   reference: "",
   display_text: "",
-  status: "",
+  status: "default",
 });
 formRef.value?.scrollIntoView({ behavior: "smooth" });
 const paymentStore = usePaymentStore();
@@ -242,6 +255,31 @@ const handleCreateSubscription = async () => {
   }
 };
 
+const handlePaymentVerification = async () => {
+  loading.value = true;
+  try {
+    const { data } = await postRequest("/api/payment/verify/account", {
+      data: {
+        code: accountVerificationInput.value,
+        reference: chargeAttempted.reference,
+        verificationType: chargeAttempted.status,
+      },
+    });
+    console.log(data);
+  } catch (error) {
+  } finally {
+    loading.value = false;
+  }
+};
+const modalLabels: { [key in ChargeDataStatus]: string } = {
+  send_pin: "PIN",
+  send_address: "ADDRESS",
+  send_otp: "OTP",
+  send_birthday: "BIRTHDAY",
+  pay_offline: "",
+  default: "",
+};
+
 const accountVerificationInput = ref("");
 const authorizationButtons = [
   {
@@ -256,6 +294,7 @@ const authenticationButtons = [
   {
     title: "Confirm",
     className: "btn-primary w-full",
+    click: handlePaymentVerification,
   },
 ];
 </script>
