@@ -258,7 +258,7 @@ const handleCreateSubscription = async () => {
 const handlePaymentVerification = async () => {
   loading.value = true;
   try {
-    const { data } = await postRequest("/api/payment/verify/account", {
+    const { data } = await postRequest("/api/payment/verify", {
       data: {
         code: accountVerificationInput.value,
         reference: chargeAttempted.reference,
@@ -295,6 +295,7 @@ const authenticationButtons = [
     title: "Confirm",
     className: "btn-primary w-full",
     click: handlePaymentVerification,
+    loading: loading.value
   },
 ];
 </script>
