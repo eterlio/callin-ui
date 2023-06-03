@@ -128,9 +128,9 @@ const handlePlanSelected = async () => {
     });
     router.push("/checkout");
   }
-  catch(error=>{
+  catch(error){
 
-  })
+  }
 
 };
 
