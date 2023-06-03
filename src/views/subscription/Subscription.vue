@@ -119,18 +119,19 @@ const allPlans = ref<IPlan[]>();
 const planId = get(userStore?.currentUser, "subscription.planId", "");
 
 const handleSelectedSubscription = (id: string) => {
-  console.log({ id });
   subscriptionStore.setPlan(id);
 };
 const handlePlanSelected = async () => {
-  if (planId) {
-    router.push("/checkout");
-  } else {
-    await postRequest("/api/subscription/create", {
+  try{
+   await postRequest("/api/subscription/create", {
       planId: subscriptionStore.planId,
     });
     router.push("/checkout");
   }
+  catch(error=>{
+
+  })
+
 };
 
 const usePlan = usePlanStore();
