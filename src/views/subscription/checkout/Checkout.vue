@@ -173,11 +173,13 @@ import Modal from "../../../components/modals/Modal.vue";
 import Button from "../../../components/buttons/Button.vue";
 import Input from "../../../components/inputs/Input.vue";
 import { postRequest } from "../../../axios/privateRequest";
+import { useUserStore } from "../../../store/users";
 
 const loading = ref<boolean>(false);
 const subscriptionStore = useSubscriptionStore();
 const planStore = usePlanStore();
-
+const paymentStore = usePaymentStore();
+const userStore = useUserStore();
 const selectedPlan = planStore.allPlans.find(
   (plan: Plan) => plan.id === subscriptionStore.planId
 );
@@ -218,7 +220,6 @@ const chargeAttempted = reactive<{
   status: "default",
 });
 formRef.value?.scrollIntoView({ behavior: "smooth" });
-const paymentStore = usePaymentStore();
 const handlePaymentType = (type: PaymentType) => {
   paymentStore.setPaymentType(type);
 };
@@ -263,7 +264,9 @@ const handlePaymentVerification = async () => {
         code: accountVerificationInput.value,
         reference: chargeAttempted.reference,
         verificationType: chargeAttempted.status,
+        subscriptionId: userStore.currentUser?.subscription.id
       },
+      reason: "subscriptionPayment"
     });
     console.log(data);
   } catch (error) {
