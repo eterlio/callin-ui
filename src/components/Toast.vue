@@ -1,62 +1,88 @@
 <template>
   <Teleport to="#toast">
     <main class="toast">
-      <div class="toast-notification">
+      <div class="toast-notification" :class="open ? 'active' : ''">
         <div class="toast-notification-container">
-          <h2 class="toast-notification-title">Connection Successful</h2>
-          <p class="toast-notification-info"></p>
+          <div class="toast-type-icon">
+            <Icon type="alert-triangle" size="16" />
+          </div>
+          <h2 class="toast-notification-title">Error</h2>
+          <p class="toast-notification-info">
+            {{ text }}
+          </p>
         </div>
-        <button class="toast-notification-close">x</button>
-        <div class="toast-notification-timeline"></div>
+        <div class="toast-notification-close">
+          <Icon type="x" size="15" />
+        </div>
       </div>
-      <button class="toast-connect">connect</button>
     </main>
   </Teleport>
 </template>
+
+<script setup lang="ts">
+import Icon from "./buttons/Icon.vue";
+
+interface Toast {
+  open: boolean;
+  text: string;
+  type: "error" | "warning" | "info" | "success";
+}
+defineProps<Toast>();
+</script>
 <style scoped>
 :root {
   --duration: 0;
 }
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-button {
-  cursor: pointer;
-}
-
 .toast {
   display: grid;
   place-items: center;
 }
 
 .toast-notification {
+  background: #fff;
   position: fixed;
-  right: 2rem;
-  top: 10vmin;
+  right: 40px;
+  top: 20px;
   width: min(325px, 90vw);
   box-shadow: 0 0 16px 10px rgba(0, 0, 0, 0.1);
-  font: 100 0.65rem poppins, helvetica, sans-serif;
-  padding: 1.5rem;
-  border-radius: 0.25rem;
+  padding: 0.5rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  transform: translateX(400px);
+  transform: translateX(1000px);
   transition: transform 0.8s;
 }
 
+.toast-type-icon.info {
+}
+.toast-type-icon.error {
+}
+.toast-type-icon.success {
+  background: green;
+}
+.toast-type-icon.warning {
+}
+.toast-type-icon {
+  width: 25px;
+  height: 25px;
+  background: red;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
 .toast-notification-title {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   line-height: 2.5;
   color: rgba(0, 0, 0, 0.75);
 }
 
 .toast-notification-info {
   color: rgba(0, 0, 0, 0.65);
+  font-size: 0.9rem;
 }
 
 .toast-notification-close {
@@ -70,16 +96,6 @@ button {
   color: rgba(0, 0, 0, 0.75);
 }
 
-.toast-notification-timeline {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 0.2rem;
-  background-color: black;
-  transform-origin: left;
-}
-
 @keyframes countdown {
   to {
     transform: scaleX(0);
@@ -90,26 +106,16 @@ button {
   animation: countdown var(--duration) linear forwards;
 }
 
-.toast-connect {
-  font-weight: 900;
-  border: none;
-  background-color: black;
-  color: white;
-  font-size: 0.85rem;
-  padding: 1rem;
-  border-radius: 0.25rem;
-}
-
-.toast-connect:active {
-  border: 1px solid black;
-}
-
 .active.toast-notification {
   transform: translateX(0);
 }
 
-.ignore.toast-connect {
-  -webkit-pointer-events: none;
-  pointer-events: none;
+@media (max-width: 600px) {
+  .toast-notification {
+    right: 0px;
+    top: 20px;
+    width: 100%;
+    margin: 0 auto;
+  }
 }
 </style>

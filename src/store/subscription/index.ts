@@ -27,10 +27,11 @@ export const useSubscriptionStore = defineStore({
     async createSubscription(payload: {
       details: PaymentDetails;
       paymentType: PaymentType;
+      planId: string;
     }) {
       const subscription = {
         coupon: this.coupon,
-        planId: this.planId,
+        planId: payload.planId,
         subscriberDetails: payload.details,
         paymentType: payload.paymentType,
       };

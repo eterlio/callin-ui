@@ -15,6 +15,7 @@ import NotFound from "../components/NotFound.vue";
 import AccessDenied from "../components/AccessDenied.vue";
 import {
   BeforeEnterGuard,
+  beforeEnterAuthPages,
   beforeEnterCheckout,
 } from "./middleware/beforeEnter";
 import { useAuthStore } from "../store/auth";
@@ -55,6 +56,7 @@ const routes: IRoutes[] = [
     path: "/auth/login",
     name: "Login",
     component: Login,
+    beforeEnter: beforeEnterAuthPages,
   },
   {
     path: "/auth/register",
@@ -81,7 +83,7 @@ const routes: IRoutes[] = [
     meta: {
       requiresAuth: true,
     },
-    beforeEnter: beforeEnterCheckout as BeforeEnterGuard,
+    beforeEnter: beforeEnterCheckout,
   },
   {
     path: "/:catchAll(.*)",
@@ -104,7 +106,6 @@ const checkAuthentication = async (next: any) => {
   try {
     const response = await getRequest("/api/auth");
 
-    console.log({ response });
     useUserStore().setUser(response.data.response.user);
     return !!response.data.response.user;
   } catch (error: any) {}

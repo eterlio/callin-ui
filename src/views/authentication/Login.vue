@@ -34,9 +34,7 @@
           </div>
           <!-- FOOTER -->
           <div class="footer">
-            <div class="steps-container">
-              <Toast />
-            </div>
+            <div class="steps-container"></div>
           </div>
         </div>
       </div>

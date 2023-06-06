@@ -12,7 +12,6 @@ import router from "./routes/index";
 import { createPinia } from "pinia";
 import { Row, Column, Hidden } from "vue-grid-responsive";
 import VueApexCharts from "vue3-apexcharts";
-
 const pinia = createPinia();
 const app = createApp(App);
 app.component(VueFeather.name, VueFeather);

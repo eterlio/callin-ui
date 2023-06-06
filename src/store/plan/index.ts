@@ -28,9 +28,14 @@ export const usePlanStore = defineStore({
     async getPlans() {
       try {
         const { data } = await axiosInstance.get("/api/plans");
-        // console.log(data.response.plans);
-        // this.plans = data.response.plans;
         this.setPlans(data.response.plans);
+        return data.response;
+      } catch (error) {}
+    },
+    async getPlan(planId: string) {
+      try {
+        const { data } = await axiosInstance.get(`/api/plans/${planId}`);
+        this.setPlans([data.response.plan]);
         return data.response;
       } catch (error) {}
     },

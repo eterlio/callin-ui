@@ -124,9 +124,8 @@
     :buttons="authorizationButtons"
     v-if="chargeAttempted.status === 'pay_offline'"
     size="full"
-    :removeCloseButton="true"
+    :hideCloseButton="true"
   />
-
   <!-- MODAL FOR NUMBER AUTHENTICATION -->
   <Modal
     :description="`Enter the ${
@@ -168,7 +167,7 @@ import {
 import { camelize, capitalize, computed, reactive, ref } from "vue";
 import MobileMoneyForm from "./MobileMoneyForm.vue";
 import CreditCardForm from "./CreditCardForm.vue";
-import { Plan, usePlanStore } from "../../../store/plan";
+import { usePlanStore } from "../../../store/plan";
 import Modal from "../../../components/modals/Modal.vue";
 import Button from "../../../components/buttons/Button.vue";
 import Input from "../../../components/inputs/Input.vue";
@@ -180,9 +179,14 @@ const subscriptionStore = useSubscriptionStore();
 const planStore = usePlanStore();
 const paymentStore = usePaymentStore();
 const userStore = useUserStore();
-const selectedPlan = planStore.allPlans.find(
-  (plan: Plan) => plan.id === subscriptionStore.planId
-);
+const selectedPlan = ref<any>(null);
+const subscriptionId =
+  subscriptionStore.planId || userStore?.currentUser?.subscription.planId;
+async function getPlan() {
+  const { plan } = await planStore.getPlan(subscriptionId);
+  selectedPlan.value = plan;
+}
+getPlan();
 
 const paymentTypes = ref<
   {
@@ -245,6 +249,7 @@ const handleCreateSubscription = async () => {
     const subscriptionCreate = await subscriptionStore.createSubscription({
       details: paymentDetails as PaymentDetails,
       paymentType: paymentStore.type,
+      planId: selectedPlan.value.id,
     });
     const response = subscriptionCreate.response.data;
     chargeAttempted.display_text = response.display_text;
@@ -264,9 +269,9 @@ const handlePaymentVerification = async () => {
         code: accountVerificationInput.value,
         reference: chargeAttempted.reference,
         verificationType: chargeAttempted.status,
-        subscriptionId: userStore.currentUser?.subscription.id
+        subscriptionId: userStore.currentUser?.subscription.id,
       },
-      reason: "subscriptionPayment"
+      reason: "subscriptionPayment",
     });
     console.log(data);
   } catch (error) {
@@ -293,12 +298,16 @@ const authorizationButtons = [
     className: "!bg-gray-600 !text-white",
   },
 ];
+const disableAccountVerificationButton = computed(() => {
+  return accountVerificationInput.value.length < 3;
+});
 const authenticationButtons = [
   {
     title: "Confirm",
     className: "btn-primary w-full",
     click: handlePaymentVerification,
-    loading: loading.value
+    loading: loading.value,
+    disabled: disableAccountVerificationButton,
   },
 ];
 </script>

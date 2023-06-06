@@ -1,3 +1,5 @@
+import { useAuthStore } from "../../store/auth";
+import { useUserStore } from "../../store/users";
 import { useSubscriptionStore } from "./../../store/subscription/index";
 import { RouteLocationNormalized, NavigationGuardNext } from "vue-router";
 
@@ -15,10 +17,23 @@ export function beforeEnterCheckout(
   next: NavigationGuardNext
 ) {
   const subscriptionStore = useSubscriptionStore();
-
-  if (!subscriptionStore.planId) {
+  const userStore = useUserStore();
+  if (
+    !subscriptionStore.planId &&
+    !userStore.currentUser?.subscription.planId
+  ) {
     next("/subscription");
   } else {
     next();
   }
+}
+
+// Define the implementation of your navigation guard
+export function beforeEnterAuthPages(
+  to: RouteLocationNormalized,
+  from: RouteLocationNormalized,
+  next: NavigationGuardNext
+) {
+  const authStore = useAuthStore();
+  next();
 }
