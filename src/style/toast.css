@@ -1,0 +1,32 @@
+.Vue-Toastification__container {
+  /* background-color: red; */
+}
+.toast .Vue-Toastification__toast {
+  background-color: white;
+  color: #333;
+  border-radius: 0px;
+  min-width: 350px;
+  max-width: 450px;
+}
+.toast .Vue-Toastification__toast .Vue-Toastification__toast-body {
+  font-size: 14px;
+}
+.toast .Vue-Toastification__toast .Vue-Toastification__close-button {
+  color: #000;
+  opacity: 0.8;
+}
+.toast .Vue-Toastification__toast--success .Vue-Toastification__icon path {
+  fill: #30d058;
+}
+.toast .Vue-Toastification__toast--success .Vue-Toastification__icon {
+  width: 24px;
+}
+.toast .Vue-Toastification__toast--error .Vue-Toastification__icon path {
+  fill: #d63135;
+}
+.toast .Vue-Toastification__toast--info .Vue-Toastification__icon path {
+  fill: #0092fd;
+}
+.toast .Vue-Toastification__toast--warning .Vue-Toastification__icon path {
+  fill: #ff9f0a;
+}

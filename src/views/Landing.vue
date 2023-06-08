@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useAuthStore } from '../store/auth';
-import { useUserStore } from '../store/users';
+import { useAuthStore } from "../store/auth";
+import { useUserStore } from "../store/users";
 
-const userStore = useUserStore()
+const userStore = useUserStore();
 const authStore = useAuthStore();
 </script>
 
@@ -21,6 +21,5 @@ const authStore = useAuthStore();
   </div>
   <h1>Hello world</h1>
   {{ JSON.stringify(userStore.currentUser, null, 2) }}
-  <p>Authenticated:   {{  authStore.isAuthenticated }}</p>
-
+  <p>Authenticated: {{ authStore.isAuthenticated }}</p>
 </template>

@@ -48,8 +48,9 @@ import { computed, reactive, ref } from "vue";
 import LoginForm from "./components/LoginForm.vue";
 import { useAuthStore } from "../../store/auth";
 import Button from "../../components/buttons/Button.vue";
-import Toast from "../../components/Toast.vue";
-
+import { successNotification, errorNotification } from "../../utils/globals";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const loginData = reactive({
   email: "",
   password: "",
@@ -69,13 +70,15 @@ const authStore = useAuthStore();
 async function login() {
   try {
     loading.value = true;
-    const result = await authStore.loginUser(
-      loginData.email,
-      loginData.password
-    );
-    console.info({ result });
+    await authStore.loginUser(loginData.email, loginData.password);
+    successNotification({ message: "User logged successfully" });
+
+    setTimeout(() => {
+      router.push("/");
+    }, 2000);
   } catch (error: any) {
-    console.log({ error });
+    const { response: { data = {} } = {} } = error;
+    errorNotification({ message: data.response || error.message });
   } finally {
     loading.value = false;
   }
