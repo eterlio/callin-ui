@@ -14,13 +14,14 @@ export const PERMISSIONS_LIST: PermissionString[] = [
   "invoice",
   "organization",
   "report",
+  "expenditure",
+  "income",
+  "role",
 ];
 export type IPermission = Record<
   PermissionString,
   Record<PermissionOperation, number>
 >;
-
-export const PERMISSIONS = structurePermissionsObject(PERMISSIONS_LIST);
 
 function structurePermissionsObject(
   permissionsArray: PermissionString[]
@@ -37,6 +38,9 @@ function structurePermissionsObject(
   }
   return permissions;
 }
+
+export const PERMISSIONS = structurePermissionsObject(PERMISSIONS_LIST);
+
 export const hasPermission = (
   userPermission: number,
   permissions: [PermissionString, PermissionOperation]

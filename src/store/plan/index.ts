@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import axiosInstance from "../../axios/publicInstance";
 
 export interface Plan {
+  fetchData: boolean;
   id: string | null;
   name: string;
   description: string;
@@ -23,14 +24,19 @@ export const usePlanStore = defineStore({
     previousPrice: 0,
     currentPrice: 0,
     allPlans: [],
+    fetchData: false,
   }),
   actions: {
     async getPlans() {
       try {
+        this.fetchData = true;
         const { data } = await axiosInstance.get("/api/plans");
         this.setPlans(data.response.plans);
         return data.response;
-      } catch (error) {}
+      } catch (error) {
+      } finally {
+        this.fetchData = false;
+      }
     },
     async getPlan(planId: string) {
       try {

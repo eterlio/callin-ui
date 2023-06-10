@@ -14,6 +14,8 @@ import { createPinia } from "pinia";
 import { Row, Column, Hidden } from "vue-grid-responsive";
 import VueApexCharts from "vue3-apexcharts";
 import Toast, { PluginOptions } from "vue-toastification";
+import DashboardWrapper from "./components/DashboardWrapper.vue";
+import Wrapper from "./components/Wrapper.vue";
 // Import the CSS or use your own!
 import "vue-toastification/dist/index.css";
 
@@ -34,6 +36,8 @@ app.component("row", Row);
 app.component("column", Column);
 app.component("hidden", Hidden);
 app.component("apexchart", VueApexCharts);
+app.component("PageWrapper", Wrapper);
+app.component("DashboardWrapper", DashboardWrapper);
 // app.use(VueApexCharts);
 app.use(router);
 app.use(pinia);

@@ -1,158 +1,160 @@
 <template>
-  <div class="checkout-container h-screen">
-    <div
-      class="container-wrapper m-auto flex justify-between py-5 flex-col h-full"
-      style="width: 95%"
-    >
-      <div class="header-link flex-grow">
-        <div
-          class="flex items-center cursor-pointer text-gray-700 w-20"
-          @click="router.go(-1)"
-        >
-          <Icon type="arrow-left" />
-          <p>Back</p>
-        </div>
-      </div>
-      <div class="main-content flex justify-between gap-8 mt-5">
-        <div class="checkout-details flex-1">
-          <h4>Select payment type</h4>
-          <div v-for="(paymentType, index) in paymentTypes">
-            <Input
-              type="radio-input"
-              name="paymentType"
-              :id="camelize(paymentType.type)"
-              :icon="paymentType.icon"
-              :label="capitalize(paymentType.type)"
-              :modelValue="paymentType.type"
-              @click="handlePaymentType(paymentType.type)"
-              :class="{
-                active: paymentStore.type === paymentType.type,
-              }"
-            />
-          </div>
+  <PageWrapper :loading="planStore.fetchData">
+    <div class="checkout-container h-screen">
+      <div
+        class="container-wrapper m-auto flex justify-between py-5 flex-col h-full"
+        style="width: 95%"
+      >
+        <div class="header-link flex-grow">
           <div
-            class="checkout-content p-8 border-2 border-solid rounded-md bg-white"
+            class="flex items-center cursor-pointer text-gray-700 w-20"
+            @click="router.go(-1)"
           >
-            <p class="text-primary font-semibold">You have to pay:</p>
-            <div class="my-4">
-              <FormTitle
-                :header="`&#8373;${selectedPlan?.currentPrice.toFixed(2)}`"
+            <Icon type="arrow-left" />
+            <p>Back</p>
+          </div>
+        </div>
+        <div class="main-content flex justify-between gap-8 mt-5">
+          <div class="checkout-details flex-1">
+            <h4>Select payment type</h4>
+            <div v-for="(paymentType, index) in paymentTypes">
+              <Input
+                type="radio-input"
+                name="paymentType"
+                :id="camelize(paymentType.type)"
+                :icon="paymentType.icon"
+                :label="capitalize(paymentType.type)"
+                :modelValue="paymentType.type"
+                @click="handlePaymentType(paymentType.type)"
+                :class="{
+                  active: paymentStore.type === paymentType.type,
+                }"
               />
             </div>
-            <div class="py-6">
-              <div class="flex items-center gap-2">
-                <div
-                  class="check relative h-4 w-4 rounded-full bg-green-400"
-                ></div>
-                <p class="text-gray-600 font-semibold">Payment & Invoice</p>
-              </div>
-              <p
-                class="pt-4 w-1/2 simple from-neutral-700 font-medium text-gray-600"
-              >
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum,
-                tempore ea? Laborum quo minus inventore.
-              </p>
-            </div>
             <div
-              class="checkout-banner p-4 bg-gray-100 flex items-center justify-between"
+              class="checkout-content p-8 border-2 border-solid rounded-md bg-white"
             >
-              <div class="flex items-center flex-1 gap-4">
-                <div
-                  class="h-6 w-6 rounded-full flex items-center justify-center"
-                >
-                  <img src="/src/assets/money.png" />
+              <p class="text-primary font-semibold">You have to pay:</p>
+              <div class="my-4">
+                <FormTitle
+                  :header="`&#8373;${selectedPlan?.currentPrice.toFixed(2)}`"
+                />
+              </div>
+              <div class="py-6">
+                <div class="flex items-center gap-2">
+                  <div
+                    class="check relative h-4 w-4 rounded-full bg-green-400"
+                  ></div>
+                  <p class="text-gray-600 font-semibold">Payment & Invoice</p>
                 </div>
-                <div class="text">
-                  <h5 class="primary-text mb-2">
-                    Yearly {{ selectedPlan?.name }} Subscription Plan
-                  </h5>
-                  <p
-                    class="w-3/4 simple from-neutral-700 font-medium text-gray-600"
+                <p
+                  class="pt-4 w-1/2 simple from-neutral-700 font-medium text-gray-600"
+                >
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                  Rerum, tempore ea? Laborum quo minus inventore.
+                </p>
+              </div>
+              <div
+                class="checkout-banner p-4 bg-gray-100 flex items-center justify-between"
+              >
+                <div class="flex items-center flex-1 gap-4">
+                  <div
+                    class="h-6 w-6 rounded-full flex items-center justify-center"
                   >
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Fugit, recusandae?
-                  </p>
+                    <img src="/src/assets/money.png" />
+                  </div>
+                  <div class="text">
+                    <h5 class="primary-text mb-2">
+                      Yearly {{ selectedPlan?.name }} Subscription Plan
+                    </h5>
+                    <p
+                      class="w-3/4 simple from-neutral-700 font-medium text-gray-600"
+                    >
+                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                      Fugit, recusandae?
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="checkout-form flex-1">
-          <FormTitle header="Payment" />
-          <p class="w-3/4 py-2 simple">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Est ad
-            quisquam eius ipsam eum recusandae.
-          </p>
+          <div class="checkout-form flex-1">
+            <FormTitle header="Payment" />
+            <p class="w-3/4 py-2 simple">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Est ad
+              quisquam eius ipsam eum recusandae.
+            </p>
 
-          <div class="checkout-form my-8 w-3/4 auto" ref="formRef">
-            <MobileMoneyForm
-              v-if="paymentStore.type === 'mobile money'"
-              @sendMobileMoneyData="handlePayment"
-            />
-            <CreditCardForm
-              v-if="paymentStore.type === 'credit card'"
-              @sendCreditCardData="handlePayment"
-            />
-            <Button
-              class="btn-primary text-center"
-              :is-valid="payButtonDisabled"
-              @click="handleCreateSubscription"
-              :loading="loading"
-              text="Pay Now"
-            />
+            <div class="checkout-form my-8 w-3/4 auto" ref="formRef">
+              <MobileMoneyForm
+                v-if="paymentStore.type === 'mobile money'"
+                @sendMobileMoneyData="handlePayment"
+              />
+              <CreditCardForm
+                v-if="paymentStore.type === 'credit card'"
+                @sendCreditCardData="handlePayment"
+              />
+              <Button
+                class="btn-primary text-center"
+                :is-valid="payButtonDisabled"
+                @click="handleCreateSubscription"
+                :loading="loading"
+                text="Pay Now"
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <div class="checkout-footer flex justify-center items-center flex-grow">
-        <p>
-          All right reserved and powered by
-          <a
-            href="https://paystack.com"
-            target="_blank"
-            class="text-primary font-semibold no-underline ml-2"
-            >Paystack</a
-          >
-        </p>
+        <div class="checkout-footer flex justify-center items-center flex-grow">
+          <p>
+            All right reserved and powered by
+            <a
+              href="https://paystack.com"
+              target="_blank"
+              class="text-primary font-semibold no-underline ml-2"
+              >Paystack</a
+            >
+          </p>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- MODAL FOR AUTHORIZATION -->
-  <Modal
-    :description="chargeAttempted.display_text"
-    :title="'Payment Authorization'"
-    :buttons="authorizationButtons"
-    v-if="chargeAttempted.status === 'pay_offline'"
-    size="full"
-    :hideCloseButton="true"
-  />
-  <!-- MODAL FOR NUMBER AUTHENTICATION -->
-  <Modal
-    :description="`Enter the ${
-      modalLabels[chargeAttempted.status]
-    } sent to your phone to verify your card`"
-    :title="'Account Verification'"
-    :buttons="authenticationButtons"
-    size="full"
-    v-if="
-      [
-        'send_pin',
-        'send_address',
-        'send_otp',
-        'send_address',
-        'send_birthday',
-      ].includes(chargeAttempted.status)
-    "
-  >
-    <Input
-      type="text"
-      :label="`ENTER ${modalLabels[chargeAttempted.status]}`"
-      :required="true"
-      width="100%"
-      v-model="accountVerificationInput"
+    <!-- MODAL FOR AUTHORIZATION -->
+    <Modal
+      :description="chargeAttempted.display_text"
+      :title="'Payment Authorization'"
+      :buttons="authorizationButtons"
+      v-if="chargeAttempted.status === 'pay_offline'"
+      size="full"
       :hideCloseButton="true"
     />
-  </Modal>
+    <!-- MODAL FOR NUMBER AUTHENTICATION -->
+    <Modal
+      :description="`Enter the ${
+        modalLabels[chargeAttempted.status]
+      } sent to your phone to verify your card`"
+      :title="'Account Verification'"
+      :buttons="authenticationButtons"
+      size="full"
+      v-if="
+        [
+          'send_pin',
+          'send_address',
+          'send_otp',
+          'send_address',
+          'send_birthday',
+        ].includes(chargeAttempted.status)
+      "
+    >
+      <Input
+        type="text"
+        :label="`ENTER ${modalLabels[chargeAttempted.status]}`"
+        :required="true"
+        width="100%"
+        v-model="accountVerificationInput"
+        :hideCloseButton="true"
+      />
+    </Modal>
+  </PageWrapper>
 </template>
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
@@ -183,8 +185,10 @@ const selectedPlan = ref<any>(null);
 const subscriptionId =
   subscriptionStore.planId || userStore?.currentUser?.subscription.planId;
 async function getPlan() {
-  const { plan } = await planStore.getPlan(subscriptionId);
-  selectedPlan.value = plan;
+  try {
+    const { plan } = await planStore.getPlan(subscriptionId);
+    selectedPlan.value = plan;
+  } catch (error) {}
 }
 getPlan();
 

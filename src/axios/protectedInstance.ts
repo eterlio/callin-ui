@@ -41,7 +41,6 @@ const useAxiosPrivate = () => {
           }
         }
       }
-
       return Promise.reject(error);
     }
   );

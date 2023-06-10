@@ -18,14 +18,13 @@ import {
   beforeEnterAuthPages,
   beforeEnterCheckout,
 } from "./middleware/beforeEnter";
-import { useAuthStore } from "../store/auth";
 import {
   PermissionOperation,
   PermissionString,
-  hasPermission,
 } from "../middleware/hasPermission";
-import { useUserStore } from "../store/users";
-import { getRequest } from "../axios/privateRequest";
+import { UserRole } from "../store/users";
+import { authGetUser } from "./middleware/getUser";
+import { canAccessRoute } from "./middleware/hasAccess";
 
 interface IRoutes {
   path: string;
@@ -102,53 +101,7 @@ const router = createRouter({
   routes,
 });
 
-const checkAuthentication = async (next: any) => {
-  try {
-    const response = await getRequest("/api/auth");
-
-    useUserStore().setUser(response.data.response.user);
-    return !!response.data.response.user;
-  } catch (error: any) {}
-};
-router.beforeEach(
-  async (
-    to: RouteLocationNormalized,
-    from: RouteLocationNormalized,
-    next: NavigationGuardNext
-  ) => {
-    const requiresAuth = !!(
-      Object.keys(to.meta).length && to.meta?.requiresAuth
-    );
-
-    const isAuthenticated = useAuthStore().isAuthenticated;
-    const userPermission = useUserStore().userPermission;
-    const permission = to.meta?.permission as [
-      PermissionString,
-      PermissionOperation
-    ];
-
-    if (requiresAuth) {
-      try {
-        const authenticatedFromApi = await checkAuthentication(next);
-        if (!isAuthenticated && !authenticatedFromApi) {
-          next({ name: "Login" });
-        } else if (
-          isAuthenticated &&
-          authenticatedFromApi &&
-          to.meta.permission &&
-          !hasPermission(userPermission, permission)
-        ) {
-          next({ name: "AccessDenied" });
-        } else {
-          next();
-        }
-      } catch (error) {
-        next({ name: "Login" }); // Redirect the user to the login screen
-      }
-    } else {
-      next();
-    }
-  }
-);
+router.beforeEach(authGetUser);
+router.beforeEach(canAccessRoute);
 
 export default router;
