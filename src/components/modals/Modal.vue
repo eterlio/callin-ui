@@ -71,7 +71,7 @@ interface IModalProps {
   buttons?: {
     title: string;
     className?: string;
-    click?: Function;
+    click?: any;
     loading?: boolean;
     disabled?: boolean;
   }[];

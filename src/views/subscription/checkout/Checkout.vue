@@ -117,44 +117,43 @@
         </div>
       </div>
     </div>
-
-    <!-- MODAL FOR AUTHORIZATION -->
-    <Modal
-      :description="chargeAttempted.display_text"
-      :title="'Payment Authorization'"
-      :buttons="authorizationButtons"
-      v-if="chargeAttempted.status === 'pay_offline'"
-      size="full"
+  </PageWrapper>
+  <!-- MODAL FOR AUTHORIZATION -->
+  <Modal
+    :description="chargeAttempted.display_text"
+    :title="'Payment Authorization'"
+    :buttons="authorizationButtons"
+    v-if="chargeAttempted.status === 'pay_offline'"
+    size="full"
+    :hideCloseButton="true"
+  />
+  <!-- MODAL FOR NUMBER AUTHENTICATION -->
+  <Modal
+    :description="`Enter the ${
+      modalLabels[chargeAttempted.status]
+    } sent to your phone to verify your card`"
+    :title="'Account Verification'"
+    :buttons="authenticationButtons"
+    size="full"
+    v-if="
+      [
+        'send_pin',
+        'send_address',
+        'send_otp',
+        'send_address',
+        'send_birthday',
+      ].includes(chargeAttempted.status)
+    "
+  >
+    <Input
+      type="text"
+      :label="`ENTER ${modalLabels[chargeAttempted.status]}`"
+      :required="true"
+      width="100%"
+      v-model="accountVerificationInput"
       :hideCloseButton="true"
     />
-    <!-- MODAL FOR NUMBER AUTHENTICATION -->
-    <Modal
-      :description="`Enter the ${
-        modalLabels[chargeAttempted.status]
-      } sent to your phone to verify your card`"
-      :title="'Account Verification'"
-      :buttons="authenticationButtons"
-      size="full"
-      v-if="
-        [
-          'send_pin',
-          'send_address',
-          'send_otp',
-          'send_address',
-          'send_birthday',
-        ].includes(chargeAttempted.status)
-      "
-    >
-      <Input
-        type="text"
-        :label="`ENTER ${modalLabels[chargeAttempted.status]}`"
-        :required="true"
-        width="100%"
-        v-model="accountVerificationInput"
-        :hideCloseButton="true"
-      />
-    </Modal>
-  </PageWrapper>
+  </Modal>
 </template>
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
@@ -302,16 +301,14 @@ const authorizationButtons = [
     className: "!bg-gray-600 !text-white",
   },
 ];
-const disableAccountVerificationButton = computed(() => {
-  return accountVerificationInput.value.length < 3;
-});
+
 const authenticationButtons = [
   {
     title: "Confirm",
     className: "btn-primary w-full",
     click: handlePaymentVerification,
     loading: loading.value,
-    disabled: disableAccountVerificationButton,
+    disabled: accountVerificationInput.value.length < 3,
   },
 ];
 </script>
