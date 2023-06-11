@@ -4,10 +4,6 @@
   --icon-border: 2px solid var(--icon-color);
 }
 
-body {
-  background: #f7f7f7;
-}
-
 .dashboard {
   display: flex;
   flex-direction: row;

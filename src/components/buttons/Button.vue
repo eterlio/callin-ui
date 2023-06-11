@@ -11,12 +11,13 @@
       </div>
     </div>
     <span v-else>{{ text }}</span>
+    <slot />
   </button>
 </template>
 
 <script setup lang="ts">
 interface Button {
-  text: string;
+  text?: string;
   loading?: boolean;
   isValid?: boolean;
 }

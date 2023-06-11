@@ -1,3 +1,4 @@
+import { get } from "lodash";
 import { useAuthStore } from "../../store/auth";
 import { useUserStore } from "../../store/users";
 import { useSubscriptionStore } from "./../../store/subscription/index";
@@ -18,10 +19,21 @@ export function beforeEnterCheckout(
 ) {
   const subscriptionStore = useSubscriptionStore();
   const userStore = useUserStore();
-  if (
-    !subscriptionStore.planId &&
-    !userStore.currentUser?.subscription.planId
-  ) {
+
+  const planId = get(subscriptionStore, "planId", null);
+  const currentUserPlanId = get(
+    userStore.currentUser,
+    "subscription.planId",
+    null
+  );
+  const userOrganizationHasActiveSubscription = get(
+    userStore.currentUser,
+    "hasActiveSubscription",
+    false
+  );
+
+  if (userOrganizationHasActiveSubscription) return next("/");
+  if (!planId && !currentUserPlanId) {
     next("/subscription");
   } else {
     next();
@@ -36,4 +48,20 @@ export function beforeEnterAuthPages(
 ) {
   const authStore = useAuthStore();
   next();
+}
+
+export function beforeEnterSubscription(
+  to: RouteLocationNormalized,
+  from: RouteLocationNormalized,
+  next: NavigationGuardNext
+) {
+  const userStore = useUserStore();
+  const userOrganizationHasActiveSubscription = get(
+    userStore.currentUser,
+    "hasActiveSubscription",
+    false
+  );
+
+  if (userOrganizationHasActiveSubscription) return next("/");
+  return next();
 }

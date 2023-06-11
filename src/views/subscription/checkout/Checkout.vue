@@ -135,6 +135,7 @@
     :title="'Account Verification'"
     :buttons="authenticationButtons"
     size="full"
+    :hideCloseButton="true"
     v-if="
       [
         'send_pin',
@@ -147,17 +148,44 @@
   >
     <Input
       type="text"
-      :label="`ENTER ${modalLabels[chargeAttempted.status]}`"
+      :label="modalLabels[chargeAttempted.status]"
       :required="true"
       width="100%"
       v-model="accountVerificationInput"
-      :hideCloseButton="true"
     />
+  </Modal>
+
+  <Modal
+    :buttons="[
+      {
+        title: 'Confirm',
+        className: 'btn-primary w-full',
+        click: () => router.push('/'),
+      },
+    ]"
+    size="sm"
+    :hideCloseButton="true"
+    :closable="false"
+  >
+    <div
+      class="success-container flex flex-col justify-center items-center text-center"
+    >
+      <div
+        class="w-7 h-7 rounded-full bg-green-400 flex items-center justify-center"
+      >
+        <Icon type="check" class="text-white" size="18" />
+      </div>
+      <h2 class="my-2">Payment success</h2>
+      <p>
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Architecto,
+        veniam.
+      </p>
+      <div class="h-[1.8px] bg-gray-100 w-full mt-5"></div>
+    </div>
   </Modal>
 </template>
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
-import Icon from "../../../components/buttons/Icon.vue";
 import FormTitle from "../../authentication/components/FormTitle.vue";
 import { useSubscriptionStore } from "../../../store/subscription";
 import {
@@ -174,6 +202,7 @@ import Button from "../../../components/buttons/Button.vue";
 import Input from "../../../components/inputs/Input.vue";
 import { postRequest } from "../../../axios/privateRequest";
 import { useUserStore } from "../../../store/users";
+import Icon from "../../../components/buttons/Icon.vue";
 
 const loading = ref<boolean>(false);
 const subscriptionStore = useSubscriptionStore();
@@ -258,7 +287,8 @@ const handleCreateSubscription = async () => {
     chargeAttempted.display_text = response.display_text;
     chargeAttempted.reference = response.reference;
     chargeAttempted.status = response.status;
-  } catch (error) {
+  } catch (error: any) {
+    console.log(error.message);
   } finally {
     loading.value = false;
   }
@@ -302,13 +332,15 @@ const authorizationButtons = [
   },
 ];
 
+const disableAuthenticationButton = computed<boolean>(() => {
+  return accountVerificationInput.value.length <= 3;
+});
 const authenticationButtons = [
   {
     title: "Confirm",
     className: "btn-primary w-full",
     click: handlePaymentVerification,
     loading: loading.value,
-    disabled: accountVerificationInput.value.length < 3,
   },
 ];
 </script>

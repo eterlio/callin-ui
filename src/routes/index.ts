@@ -13,10 +13,12 @@ import Subscription from "../views/subscription/Subscription.vue";
 import Checkout from "../views/subscription/checkout/Checkout.vue";
 import NotFound from "../components/NotFound.vue";
 import AccessDenied from "../components/AccessDenied.vue";
+import Onboarding from "../views/organization/Onboarding.vue";
 import {
   BeforeEnterGuard,
   beforeEnterAuthPages,
   beforeEnterCheckout,
+  beforeEnterSubscription,
 } from "./middleware/beforeEnter";
 import {
   PermissionOperation,
@@ -25,6 +27,8 @@ import {
 import { UserRole } from "../store/users";
 import { authGetUser } from "./middleware/getUser";
 import { canAccessRoute } from "./middleware/hasAccess";
+import { redirectToOnboarding } from "./middleware/beforeResolve";
+import { createPinia, setActivePinia } from "pinia";
 
 interface IRoutes {
   path: string;
@@ -74,6 +78,7 @@ const routes: IRoutes[] = [
     meta: {
       requiresAuth: true,
     },
+    beforeEnter: beforeEnterSubscription,
   },
   {
     path: "/checkout",
@@ -94,6 +99,14 @@ const routes: IRoutes[] = [
     name: "AccessDenied",
     component: AccessDenied,
   },
+  {
+    path: "/organization-setup",
+    name: "OrganizationOnboarding",
+    component: Onboarding,
+    meta: {
+      requiresAuth: true,
+    },
+  },
 ];
 
 const router = createRouter({
@@ -103,5 +116,6 @@ const router = createRouter({
 
 router.beforeEach(authGetUser);
 router.beforeEach(canAccessRoute);
+router.beforeResolve(redirectToOnboarding);
 
 export default router;

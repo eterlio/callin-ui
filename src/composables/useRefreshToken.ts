@@ -7,7 +7,9 @@ export function useRefreshToken() {
         withCredentials: true,
       });
       return response.data.response.accessToken;
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
 
   return {

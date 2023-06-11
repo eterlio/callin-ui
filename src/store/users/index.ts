@@ -6,8 +6,8 @@ export interface IPhone {
 }
 export type UserRole =
   | "admin"
-  | "organizationadmin"
-  | "subadmin"
+  | "orgAdmin"
+  | "subaAdmin"
   | "secretary"
   | "lawyer"
   | "client"
@@ -26,7 +26,7 @@ export interface IUser {
   physicalAddress: IAddress;
   mailingAddress: IAddress;
   belongsToOrg: boolean;
-  organizationIds: string;
+  organizationId: string;
   status: UserStatus;
   isDeleted: boolean;
   isLoggedIn: boolean;
@@ -37,6 +37,7 @@ export interface IUser {
   createdAt: Date;
   updateAt: Date;
   subscription: any;
+  hasActiveSubscription: boolean;
 }
 export interface IAddress {
   houseNumber: string;
@@ -51,12 +52,6 @@ export type UserStatus =
   | "suspended"
   | "pendingApproval"
   | "inactive";
-interface IUserStore {
-  currentUser: IUser | null;
-  setUser(user: IUser): void;
-  clearUser(): void;
-  id: string;
-}
 
 interface IUserState {
   currentUser: IUser | null;
@@ -79,7 +74,7 @@ export const useUserStore = defineStore({
     setUser(user: IUser): void {
       this.currentUser = user;
     },
-    clearUser(this: IUserStore): void {
+    clearUser(this: IUserState): void {
       this.currentUser = null;
     },
   },

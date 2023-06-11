@@ -14,7 +14,6 @@ const useAxiosPrivate = () => {
       if (authStore.accessToken) {
         config.headers.Authorization = `Bearer ${authStore.accessToken}`;
       }
-
       return config;
     }
   );
@@ -37,8 +36,12 @@ const useAxiosPrivate = () => {
             ] = `Bearer ${authStore.accessToken}`;
             return axiosInstance(prevRequest);
           } catch (err) {
-            console.log("I came here");
+            isRefreshing = true;
+            return Promise.reject(error);
           }
+        } else {
+          isRefreshing = false;
+          return Promise.reject(error);
         }
       }
       return Promise.reject(error);

@@ -54,7 +54,7 @@
                     type="radio"
                     id="organization"
                     class="hidden"
-                    value="organizationadmin"
+                    value="orgAdmin"
                     name="accountType"
                     v-model="stepValues.stepOne.value"
                   />
@@ -87,7 +87,7 @@
               <button
                 @click="validStepOneButtonClick"
                 :disabled="!disableStep"
-                class="btn-primary"
+                class="btn btn-primary"
                 v-if="currentStep === 'step-1'"
               >
                 Continue

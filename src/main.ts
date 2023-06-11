@@ -26,10 +26,11 @@ const options: PluginOptions = {
   timeout: 5000,
 };
 
-const pinia = createPinia();
 const app = createApp(App);
+const pinia = createPinia();
+app.use(pinia);
 app.use(Toast, options);
-app.config.globalProperties.successNotification = 5;
+app.use(router);
 app.component(VueFeather.name, VueFeather);
 app.component("EasyDataTable", Vue3EasyDataTable);
 app.component("row", Row);
@@ -39,6 +40,4 @@ app.component("apexchart", VueApexCharts);
 app.component("PageWrapper", Wrapper);
 app.component("DashboardWrapper", DashboardWrapper);
 // app.use(VueApexCharts);
-app.use(router);
-app.use(pinia);
 app.mount("#app");

@@ -19,10 +19,10 @@
             :class="`modal-wrapper flex justify-center items-center flex-col flex-1`"
             style="min-height: 300px"
           >
-            <div class="modal-title my-4 text-center">
+            <div class="modal-title my-2 text-center" v-if="title">
               <h2>{{ title }}</h2>
             </div>
-            <div class="modal-description my-2 text-center">
+            <div class="modal-description my-2 text-center" v-if="description">
               <p>{{ description }}</p>
             </div>
 
@@ -40,7 +40,13 @@
             <div class="modal-content my-3">
               <slot />
             </div>
-            <div class="modal-buttons flex justify-center items-center gap-5">
+            <div
+              class="modal-buttons gap-5"
+              :class="{
+                ' flex justify-center items-center': (buttons as any).length > 1,
+                'w-11/12': (buttons as any).length === 1
+              }"
+            >
               <div v-for="(button, index) in buttons" :key="index">
                 <Button
                   :loading="button.loading"
@@ -78,6 +84,7 @@ interface IModalProps {
   size?: "sm" | "md" | "lg" | "full";
   hideCloseButton?: boolean;
   contentCenter?: boolean;
+  closable?: boolean;
 }
 const props = defineProps<IModalProps>();
 
@@ -97,8 +104,13 @@ const closeModal = () => {
   isModalOpen.value = false;
 };
 
-onClickOutside(modalRef, () => (isModalOpen.value = false));
+onClickOutside(modalRef, () => {
+  if (props.closable) {
+    isModalOpen.value = false;
+  }
+});
 const modalSizeMapper = {
+  mini: "w-1/5",
   sm: "w-2/5",
   md: "w-1/2",
   lg: "w-2/3",

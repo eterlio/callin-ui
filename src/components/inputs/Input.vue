@@ -23,8 +23,64 @@
         </div>
       </div>
     </div>
+    <div class="normal-input" v-else-if="type === 'textarea'">
+      <label :for="id" v-if="inputLabel" class="label"
+        >{{ inputLabel }}
+        <sup class="font-bold text-red-500" v-if="required">*</sup></label
+      >
+      <textarea
+        @input="
+          $emit(
+            'update:modelValue',
+            ($event.target as HTMLTextAreaElement).value
+          ),
+            $emit('hasErrors', inputHasErrors)
+        "
+        :value="modelValue"
+        :class="{ 'is-invalid invalid-input': !inputHasErrors.isValid }"
+        :style="{ width: width }"
+        class="input"
+        :rows="size"
+      ></textarea>
+      <small
+        :class="{ 'text-sm invalid-feedback': !inputHasErrors.isValid }"
+        v-if="!inputHasErrors.isValid"
+      >
+        {{ inputHasErrors.errorMessage }}</small
+      >
+    </div>
+    <div class="normal-input" v-else-if="type === 'select'">
+      <label :for="id" v-if="inputLabel" class="label"
+        >{{ inputLabel }}
+        <sup class="font-bold text-red-500" v-if="required">*</sup></label
+      >
+      <select
+        @input="
+          $emit(
+            'update:modelValue',
+            ($event.target as HTMLSelectElement).value
+          ),
+            $emit('hasErrors', inputHasErrors)
+        "
+        :value="modelValue"
+        :class="{ 'is-invalid invalid-input': !inputHasErrors.isValid }"
+        :style="{ width: width }"
+        class="input"
+      >
+        <slot></slot>
+      </select>
+      <small
+        :class="{ 'text-sm invalid-feedback': !inputHasErrors.isValid }"
+        v-if="!inputHasErrors.isValid"
+      >
+        {{ inputHasErrors.errorMessage }}</small
+      >
+    </div>
     <div class="normal-input" v-else>
-      <label :for="id" v-if="inputLabel" class="label">{{ inputLabel }}</label>
+      <label :for="id" v-if="inputLabel" class="label"
+        >{{ inputLabel }}
+        <sup class="font-bold text-red-500" v-if="required">*</sup></label
+      >
       <input
         @input="
           $emit('update:modelValue', ($event.target as HTMLInputElement).value),
@@ -45,6 +101,7 @@
     </div>
   </div>
 </template>
+
 <script lang="ts" setup emits="increment">
 import { reactive, ref, watch } from "vue";
 import Icon from "../buttons/Icon.vue";
@@ -57,7 +114,9 @@ type inputTypes =
   | "datetime"
   | "datetime-local"
   | "number"
-  | "radio-input";
+  | "radio-input"
+  | "textarea"
+  | "select";
 interface IInput {
   type: inputTypes;
   placeholder?: string;
@@ -67,6 +126,7 @@ interface IInput {
   required?: boolean;
   width?: string;
   icon?: string;
+  size?: string;
 }
 defineEmits(["update:modelValue", "hasErrors"]);
 const props = defineProps<IInput>();
