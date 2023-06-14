@@ -14,24 +14,23 @@
     </div>
 
     <div class="input-container">
-      <Input
-        type="email"
+      <FormInput
+        type="text"
         label="Email"
-        :required="true"
         width="100%"
         v-model="inputData.email"
-        @input="$emit('sendLoginData', inputData)"
-        @hasErrors="(data:any)=>$emit('hasErrors', data)"
+        validations="email"
+        validation-name="Email"
       />
     </div>
     <div class="input-container">
-      <Input
+      <FormInput
         type="password"
         label="Password"
-        :required="true"
         width="100%"
+        validations="password"
+        validation-name="Password"
         v-model="inputData.password"
-        @input="$emit('sendLoginData', inputData)"
       />
       <div class="my-2 mb-4 flex justify-end items-end">
         <RouterLink
@@ -45,7 +44,6 @@
 </template>
 <script lang="ts" setup>
 import FormTitle from "./FormTitle.vue";
-import Input from "../../../components/inputs/Input.vue";
 import { reactive } from "vue";
 import ExternalAuth from "./ExternalAuth.vue";
 import LineWithText from "./LineWithText.vue";

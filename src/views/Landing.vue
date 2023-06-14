@@ -35,6 +35,7 @@
     }"
     help="Something cool"
     :bail="true"
+    width="100%"
   />
 </template>
 <script setup lang="ts">

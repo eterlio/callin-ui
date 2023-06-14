@@ -1,14 +1,18 @@
 <template>
-  <div>
+  <div class="input-container">
     <label for="" v-if="props.label">
       {{ props.label }} <sup v-if="requiredRegex">*</sup>
     </label>
     <input
       @input="
-        $emit('update:modelValue', ($event.target as HTMLInputElement).value)
+        $emit('update:modelValue', ($event.target as HTMLInputElement).value),
+          $emit('validated', { errors, hasErrors: errors.length > 0 })
       "
       @blur="handleBlur"
       :value="modelValue"
+      class="input"
+      :style="{ width: width }"
+      :class="{ 'invalid-input': errors.length }"
     />
     <small v-if="props.help">{{ props.help }}</small>
     <ul v-if="errors.length && !props.bail">
@@ -31,7 +35,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { Validator } from "./utils/Validator";
-defineEmits(["update:modelValue"]);
+defineEmits(["update:modelValue", "validated"]);
 
 type ValidationRule =
   | "required"
@@ -61,12 +65,12 @@ interface Props {
   name?: string;
   modelValue: string;
   label?: string;
+  width?: string;
 }
 
 const props = defineProps<Props>();
 const errors = ref<string[]>([]);
 
-const c = "something";
 const requiredRegex = new RegExp("required", "i").test(
   props.validations as string
 );
@@ -85,11 +89,10 @@ const handleBlur = () => {
 };
 
 const validateRequired = () => {
-  errors.value = [];
   const nameToUse: string = (props.name || props?.validationName) as string;
   const actualErrorMessage = validationMessages["required"];
 
-  if (!Validator.required(props.modelValue)) {
+  if (requiredRegex && !Validator.required(props.modelValue)) {
     errors.value.push(actualErrorMessage || `${nameToUse} is required`);
   }
 };
@@ -97,6 +100,7 @@ const validateRequired = () => {
 watch(
   () => props.modelValue,
   () => {
+    errors.value = [];
     if (props.modelValue && splittedValidations.length) {
       for (const rule of splittedValidations) {
         const splittedRule = rule.split(":");
@@ -135,6 +139,17 @@ watch(
               );
             break;
           }
+          case "password": {
+            if (!Validator.password(props.modelValue))
+              errors.value.push(actualErrorMessage || `Invalid password`);
+            break;
+          }
+          case "email": {
+            console.log(Validator.email(props.modelValue));
+            if (!Validator.email(props.modelValue))
+              errors.value.push(actualErrorMessage || `Invalid email`);
+            break;
+          }
           // Add more validation cases for other rules
         }
       }
@@ -144,6 +159,9 @@ watch(
 </script>
 
 <style scoped>
+li {
+  list-style: none;
+}
 input {
   display: block;
 }
@@ -155,5 +173,31 @@ input {
 sup {
   font-weight: 700;
   color: rgba(201, 27, 27, 0.858);
+}
+.input-container {
+  margin: 0.5rem 0;
+}
+.input-container .label {
+  display: block;
+  margin: 0.5rem 0;
+}
+.input-container .input {
+  outline: none;
+  display: block;
+  padding: 0.812rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #e2edfb30;
+  background-clip: padding-box;
+  border: 1px solid #0a39772a;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out,
+    background-color 0.15s ease-in-out;
+}
+.invalid-input {
+  border-color: rgba(255, 0, 0, 0.382) !important;
+  background-color: #fef1f215 !important;
 }
 </style>
