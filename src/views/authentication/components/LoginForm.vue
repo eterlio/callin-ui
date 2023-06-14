@@ -21,6 +21,7 @@
         v-model="inputData.email"
         validations="email"
         validation-name="Email"
+        @input="$emit('sendLoginData', inputData)"
       />
     </div>
     <div class="input-container">
@@ -31,6 +32,7 @@
         validations="password"
         validation-name="Password"
         v-model="inputData.password"
+        @input="$emit('sendLoginData', inputData)"
       />
       <div class="my-2 mb-4 flex justify-end items-end">
         <RouterLink
@@ -52,6 +54,7 @@ const inputData = reactive({
   email: "",
   password: "",
 });
+defineEmits(["sendLoginData"]);
 const externalAuthData = {
   google: {},
   facebook: {},
