@@ -9,14 +9,7 @@
     />
   </div>
   <div class="input-container my-5">
-    <!-- <Input
-      type="select"
-      width="100%"
-      label="Corporation Type"
-      :required="true"
-      v-model="organization.corporationType"
-    /> -->
-    <Select></Select>
+  
   </div>
   <div class="input-container my-5">
     <Input
@@ -41,7 +34,6 @@
 </template>
 <script setup lang="ts">
 import Input from "../../components/inputs/Input.vue";
-import Select from "../../components/inputs/Select.vue";
 
 defineProps({
   organization: {
