@@ -29,6 +29,20 @@
         <sup class="font-bold text-red-500" v-if="required">*</sup></label
       >
 
+      <textarea
+        name=""
+        id=""
+        cols="30"
+        :rows="size"
+        class="normal-input w-full"
+        @input="
+          $emit('update:modelValue', ($event.target as HTMLInputElement).value),
+            $emit('hasErrors', inputHasErrors)
+        "
+        :value="modelValue"
+        :class="{ 'is-invalid invalid-input': !inputHasErrors.isValid }"
+        :style="{ width: width }"
+      ></textarea>
       <small
         :class="{ 'text-sm invalid-feedback': !inputHasErrors.isValid }"
         v-if="!inputHasErrors.isValid"
@@ -86,6 +100,7 @@ interface IInput {
   required?: boolean;
   width?: string;
   icon?: string;
+  size?: string;
 }
 defineEmits(["update:modelValue", "hasErrors"]);
 const props = defineProps<IInput>();
@@ -152,17 +167,19 @@ watch(
 }
 .input-container .label {
   display: block;
-  margin: 0.5rem 0;
+  margin: 0.6rem 0;
+  font-size: 14px;
 }
-.input-container .input {
+.input-container .input,
+.input-container textarea {
   outline: none;
   display: block;
-  padding: 0.812rem 0.75rem;
+  padding: 0.55rem 0.75rem;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
   color: #212529;
-  background-color: #e2edfb30;
+  background-color: #e2edfb0f;
   background-clip: padding-box;
   border: 1px solid #0a39772a;
   border-radius: 0.25rem;

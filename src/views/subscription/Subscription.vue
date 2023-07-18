@@ -42,7 +42,7 @@
               </div>
               <div class="submit">
                 <button
-                  class="btn-primary"
+                  class="btn btn-primary"
                   :disabled="!subscriptionStore.planId"
                   @click="handlePlanSelected"
                 >

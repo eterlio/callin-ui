@@ -1,5 +1,5 @@
 <template>
-  <Wrapper title="ADMIN DASHBOARD">
+  <DashboardWrapper title="ADMIN DASHBOARD" :requireSidebar="true" :requireHeader="true">
     <Suspense>
       <template #default>
         <DashboardCardData />
@@ -172,18 +172,18 @@
         </column>
       </row>
     </div>
-  </Wrapper>
+  </DashboardWrapper>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
-import Wrapper from "../../components/Wrapper.vue";
 import Chart from "../Chart.vue";
 import DoughNutChart from "../DoughNutChart.vue";
 import DashboardCardData from "./DashboardCardData.vue";
 import DashboardCardDataShimmer from "../../components/shimmers/DashboardCardShimmer.vue";
 import Input from "../../components/inputs/Input.vue";
 import Table from "../../components/table/Table.vue";
+import DashboardWrapper from "../../components/DashboardWrapper.vue";
 const incomeSelected = ref("option1");
 const expenditureSelected = ref("option1");
 const email = ref("");

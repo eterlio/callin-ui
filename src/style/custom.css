@@ -16,12 +16,13 @@
 .btn {
   border: none;
   border-radius: 4px;
-  padding: 0.7rem 2rem;
-  font-size: 16px;
+  padding: 0.55rem 2rem;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: 0.3s ease-in-out;
   min-width: 150px;
+  min-height: 45px;
   cursor: pointer;
   margin: 0.4rem 0;
   background-color: #eff5f9;
@@ -37,7 +38,7 @@
   color: #fff;
   border: none;
   border-radius: 4px;
-  padding: 0.4rem 1rem;
+  padding: 0.3rem 1rem;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -156,7 +157,7 @@
 }
 
 .btn-primary {
-  background-color: #3b82f6;
+  background-color: #1c39bb;
   outline: none;
   color: #fff;
   font-weight: 500;

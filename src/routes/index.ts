@@ -1,6 +1,4 @@
 import {
-  NavigationGuardNext,
-  RouteLocationNormalized,
   createRouter,
   createWebHistory,
 } from "vue-router";
@@ -16,19 +14,17 @@ import AccessDenied from "../components/AccessDenied.vue";
 import Onboarding from "../views/organization/Onboarding.vue";
 import {
   BeforeEnterGuard,
-  beforeEnterAuthPages,
   beforeEnterCheckout,
+  beforeEnterOrganizationOnboarding,
   beforeEnterSubscription,
 } from "./middleware/beforeEnter";
 import {
   PermissionOperation,
   PermissionString,
 } from "../middleware/hasPermission";
-import { UserRole } from "../store/users";
 import { authGetUser } from "./middleware/getUser";
 import { canAccessRoute } from "./middleware/hasAccess";
 import { redirectToOnboarding } from "./middleware/beforeResolve";
-import { createPinia, setActivePinia } from "pinia";
 
 interface IRoutes {
   path: string;
@@ -48,18 +44,9 @@ const routes: IRoutes[] = [
     component: Landing,
   },
   {
-    path: "/dashboard",
-    name: "Dashboard",
-    component: Dashboard,
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  {
     path: "/auth/login",
     name: "Login",
     component: Login,
-    beforeEnter: beforeEnterAuthPages,
   },
   {
     path: "/auth/register",
@@ -105,7 +92,18 @@ const routes: IRoutes[] = [
     component: Onboarding,
     meta: {
       requiresAuth: true,
+      permission: ["organization", "update"],
     },
+    beforeEnter: beforeEnterOrganizationOnboarding,
+  },
+  {
+    path: "/:role",
+    name: "Dashboard",
+    component: Dashboard,
+    meta: {
+      requiresAuth: true,
+    },
+
   },
 ];
 

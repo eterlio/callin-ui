@@ -2,8 +2,18 @@ import { defineStore } from "pinia";
 import { IAddress, IPhone } from "../users";
 import { getRequest, putRequest } from "../../axios/privateRequest";
 import { organizationBase } from "./default";
+import { mergeObjects } from "../../helpers/mergeObjects";
 
 // Interface for the organization document
+export interface IOrganizationValidations {
+  hasValidOrganizationInfo: boolean;
+  hasValidOrganizationSize: boolean;
+  hasValidOrganiztionContact: boolean;
+}
+export interface ISubscriptionInfo{
+  hasSelectedSubscription: boolean;
+  hasActiveSubscription: boolean;
+}
 export interface IOrganization {
   id: string;
   name: string;
@@ -35,6 +45,11 @@ export interface IOrganization {
   size: "0" | "1-1" | "2-10" | "10-50" | "50+";
   slogan: string;
   corporationType: string;
+
+  // Virtuals
+  organizationValidations?: IOrganizationValidations;
+  subscriptionInfo?: ISubscriptionInfo
+  subscription?:any;
 }
 
 type OrganizationStatus = "active" | "suspended" | "pending";
@@ -61,17 +76,17 @@ export const useOrganizationStore = defineStore({
   }),
   actions: {
     setOrganization(organization: IOrganization): void {
-      this.organization = { ...organization, ...this.organization };
+      const mergedOrg = mergeObjects(this.organization, organization)
+      this.organization = mergedOrg;
     },
-
-    async getOrganization(payload: { organizationId: string }) {
+    async fetchOrganization(payload: { organizationId: string }) {
       this.fetchData = true;
       try {
         const { data } = await getRequest(
-          `/api/organizations/${payload.organizationId}`
+          `/api/${payload.organizationId}/organizations`
         );
-        this.setOrganization({ ...data.response });
-        return { ...data.response };
+        this.setOrganization(data.response);
+        return data.response;
       } finally {
         this.fetchData = false;
       }
@@ -83,14 +98,19 @@ export const useOrganizationStore = defineStore({
       this.fetchData = true;
       try {
         const { data } = await putRequest(
-          `/api/organizations/${organizationId}`,
+          `/api/${organizationId}/organizations`,
           payload
         );
-        this.setOrganization({ ...data.response });
-        return { ...data.response };
+        this.setOrganization(data.response);
+        return data.response;
       } finally {
         this.fetchData = false;
       }
+    },
+  },
+  getters: {
+    getOrganization: (state) => {
+      return state.organization;
     },
   },
 });

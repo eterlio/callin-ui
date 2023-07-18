@@ -9,15 +9,29 @@
     />
   </div>
   <div class="input-container my-5">
-  
+    <Input
+      type="email"
+      label="Organization Email"
+      :required="true"
+      width="100%"
+      v-model="organization.email"
+    />
+  </div>
+  <div class="input-container">
+    <Input
+      type="text"
+      width="100%"
+      label="Organization Phone"
+      :required="true"
+      v-model="organization.phone.number"
+    />
   </div>
   <div class="input-container my-5">
     <Input
-      type="textarea"
+      type="text"
       width="100%"
       label="Organization Slogan"
       :required="true"
-      size="2"
       v-model="organization.slogan"
     />
   </div>
@@ -27,14 +41,15 @@
       width="100%"
       label="Organization Description"
       :required="true"
-      size="6"
+      size="2"
       v-model="organization.description"
     />
   </div>
 </template>
 <script setup lang="ts">
 import Input from "../../components/inputs/Input.vue";
-
+import { ref } from "vue";
+const phone = ref()
 defineProps({
   organization: {
     type: Object,

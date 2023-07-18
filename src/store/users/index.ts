@@ -21,7 +21,7 @@ export interface IUser {
   lastName: string;
   gender: "male" | "female";
   permission: {
-    access: number;
+    access: string;
   };
   physicalAddress: IAddress;
   mailingAddress: IAddress;
@@ -57,12 +57,11 @@ interface IUserState {
   currentUser: IUser | null;
 }
 export interface IUserGetters {
-  currentUser: IUser | null;
   isLoggedIn: boolean;
   isAdmin: boolean;
   isSuperAdmin: boolean;
   isPendingApproval: boolean;
-  isInactive: boolean;
+  userPermission: ()=> string;
 }
 
 export const useUserStore = defineStore({
@@ -79,8 +78,21 @@ export const useUserStore = defineStore({
     },
   },
   getters: {
-    userPermission(): number {
-      return this.currentUser?.permission.access as number;
+    userPermission(): string {
+      return this.currentUser?.permission.access as string;
     },
+    isAdmin(): boolean{
+      return !!(this.currentUser?.role && this.currentUser.role === "admin");
+    },
+    isOrgAdmin(): boolean{
+      return !!(this.currentUser?.role && this.currentUser.role === "orgAdmin");
+    },
+    isPendingApproval(): boolean{
+      return !!(this.currentUser?.status && this.currentUser.status === "pendingApproval");
+    },
+    isLoggedIn(): boolean {
+      return !!(this.currentUser?.isLoggedIn)
+    }
   },
+  
 });

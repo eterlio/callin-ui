@@ -1,7 +1,7 @@
 <template>
   <button
     class="flex items-center justify-center"
-    :disabled="isValid || loading"
+    :disabled="disabled || loading"
   >
     <div v-if="loading">
       <div class="loader">
@@ -19,7 +19,7 @@
 interface Button {
   text?: string;
   loading?: boolean;
-  isValid?: boolean;
+  disabled?: boolean;
 }
 
 defineProps<Button>();

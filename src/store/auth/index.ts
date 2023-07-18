@@ -3,7 +3,6 @@ import axiosInstance from "../../axios/publicInstance";
 import { useUserStore } from "../users";
 interface AuthState {
   accessToken: string;
-  refreshToken: string;
 }
 
 interface AuthGetters {
@@ -14,7 +13,6 @@ export const useAuthStore = defineStore({
   id: "auth",
   state: (): AuthState => ({
     accessToken: "",
-    refreshToken: "",
   }),
   getters: {
     isAuthenticated(): AuthGetters["isAuthenticated"] {
@@ -22,16 +20,14 @@ export const useAuthStore = defineStore({
     },
   },
   actions: {
-    setTokens(accessToken: string, refreshToken: string): void {
+    setTokens(accessToken: string): void {
       this.accessToken = accessToken;
-      this.refreshToken = refreshToken;
     },
     setAccessToken(accessToken: string): void {
       this.accessToken = accessToken;
     },
     clearTokens(): void {
       this.accessToken = "";
-      this.refreshToken = "";
     },
     async loginUser(email: string, password: string) {
       const userStore = useUserStore();
@@ -42,8 +38,7 @@ export const useAuthStore = defineStore({
       const { response: responseData } = response.data;
       userStore.setUser(responseData.user);
       this.setTokens(
-        responseData.token.accessToken,
-        responseData.token.refreshToken
+        responseData.accessToken,
       );
       return response.data;
     },

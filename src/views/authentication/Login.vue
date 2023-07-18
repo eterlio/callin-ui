@@ -20,7 +20,7 @@
                 @click="login"
                 text="Login"
                 :loading="loading"
-                :isValid="disableButton"
+                :disabled="disableButton"
               />
             </div>
             <div class="my-2 mb-4 flex justify-end items-end">

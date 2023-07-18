@@ -45,7 +45,7 @@
   transition: border-color 0.2s linear;
 }
 .account-selectors__container .selector input[type="radio"]:checked + label {
-  border: 2px solid #434ce6;
+  border: 2px solid #1c39bb;
 }
 .account-selectors__container .selector .check {
   width: 20px;
@@ -75,7 +75,7 @@
   input[type="radio"]:checked
   + label
   .check {
-  background-color: #434ce6;
+  background-color: #1c39bb;
 }
 .account-selectors__container .selector .main {
   flex: 1;
@@ -111,7 +111,7 @@
   transition: background-color 0.2s ease-in-out;
 }
 .step input[type="radio"]:checked + label {
-  background: #434be6;
+  background: #1c39bb;
 }
 .external__auth {
   display: flex;

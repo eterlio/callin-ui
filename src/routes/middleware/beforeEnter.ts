@@ -1,8 +1,6 @@
-import { get } from "lodash";
-import { useAuthStore } from "../../store/auth";
 import { useUserStore } from "../../store/users";
-import { useSubscriptionStore } from "./../../store/subscription/index";
 import { RouteLocationNormalized, NavigationGuardNext } from "vue-router";
+import { useOrganizationStore } from "../../store/organization";
 
 // Define the navigation guard function type
 export type BeforeEnterGuard = (
@@ -17,27 +15,29 @@ export function beforeEnterCheckout(
   from: RouteLocationNormalized,
   next: NavigationGuardNext
 ) {
-  const subscriptionStore = useSubscriptionStore();
+  const organizationStore = useOrganizationStore();
+
+  const userOrganizationHasActiveSubscription = organizationStore.organization.subscriptionInfo?.hasActiveSubscription
+
+  if (userOrganizationHasActiveSubscription) return next({name: "OrganizationOnboarding"});
+  return next();
+}
+export function beforeEnterOrganizationOnboarding(
+  to: RouteLocationNormalized,
+  from: RouteLocationNormalized,
+  next: NavigationGuardNext
+) {
   const userStore = useUserStore();
-
-  const planId = get(subscriptionStore, "planId", null);
-  const currentUserPlanId = get(
-    userStore.currentUser,
-    "subscription.planId",
-    null
-  );
-  const userOrganizationHasActiveSubscription = get(
-    userStore.currentUser,
-    "hasActiveSubscription",
-    false
-  );
-
-  if (userOrganizationHasActiveSubscription) return next("/");
-  if (!planId && !currentUserPlanId) {
-    next("/subscription");
-  } else {
-    next();
-  }
+  const organizationStore = useOrganizationStore();
+  const organizationValidation =
+    organizationStore.organization.organizationValidations;
+  if (
+    organizationValidation?.hasValidOrganizationInfo &&
+    organizationValidation?.hasValidOrganiztionContact &&
+    organizationValidation?.hasValidOrganizationSize
+  ) {
+    return next(`/${userStore.currentUser?.role}`);
+  } else return next();
 }
 
 // Define the implementation of your navigation guard
@@ -46,7 +46,6 @@ export function beforeEnterAuthPages(
   from: RouteLocationNormalized,
   next: NavigationGuardNext
 ) {
-  const authStore = useAuthStore();
   next();
 }
 
@@ -55,13 +54,11 @@ export function beforeEnterSubscription(
   from: RouteLocationNormalized,
   next: NavigationGuardNext
 ) {
-  const userStore = useUserStore();
-  const userOrganizationHasActiveSubscription = get(
-    userStore.currentUser,
-    "hasActiveSubscription",
-    false
-  );
+  const organizationStore = useOrganizationStore();
 
-  if (userOrganizationHasActiveSubscription) return next("/");
-  return next();
+  const userOrganizationHasActiveSubscription =
+    organizationStore.organization.subscriptionInfo?.hasSelectedSubscription;
+  if (userOrganizationHasActiveSubscription) {
+    return next({ name: "Checkout" });
+  } else return next();
 }

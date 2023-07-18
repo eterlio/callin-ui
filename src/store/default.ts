@@ -9,9 +9,9 @@ export const defaultAddress: IAddress = {
 };
 
 export const defaultPhone: IPhone = {
-  country: "",
+  country: "GH",
   number: "",
-  prefix: "",
+  prefix: "233",
 };
 
 export const defaultSocialMedia = {

@@ -1,7 +1,6 @@
 <template>
   <div
     class="stepper-item relative pb-[2.5rem] flex items-center transition-colors ease-in-out cursor-pointer"
-    :class="status"
   >
     <div
       class="stepper-line w-[40px] absolute z-0 left-0 top-0 bottom-0 translate-x-[50%]"
@@ -15,6 +14,7 @@
         size="19"
         class="text-blue-600 font-extrabold"
         v-if="status === 'completed'"
+
       />
       <span
         v-else-if="status === 'pending'"
@@ -49,14 +49,14 @@ defineProps({
     default: "pending",
   },
   step: {
-    type: String,
+    type: Number,
     required: true,
   },
   active: {
     type: Boolean,
     required: false,
     default: false,
-  },
+  }
 });
 </script>
 <style>

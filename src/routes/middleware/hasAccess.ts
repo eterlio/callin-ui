@@ -21,7 +21,7 @@ export const canAccessRoute = async (
   const userStore = useUserStore();
   const { required } = routeRequireAuth(to);
   if (!required) return next();
-  if (authStore.isAuthenticated) {
+  if (required && authStore.isAuthenticated) {
     try {
       const userPermission = userStore.currentUser?.permission;
       const permission = to.meta?.permission as [
@@ -30,12 +30,14 @@ export const canAccessRoute = async (
       ];
       if (
         !!permission &&
-        !hasPermission(userPermission?.access as number, permission)
+        !hasPermission(userPermission?.access as string, permission)
       ) {
         return redirectToNotAuthorized(next);
       }
       return next();
     } catch (error) {
+      console.log("I was in this error");
+      
       return redirectToLogin(next, to.fullPath);
     }
   }

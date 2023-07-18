@@ -27,4 +27,9 @@ export const organizationBase: IOrganization = {
   updatedBy: "",
   slogan: "",
   corporationType: "",
+  organizationValidations:{
+    hasValidOrganizationInfo: false,
+    hasValidOrganizationSize: false,
+    hasValidOrganiztionContact: false
+  }
 };

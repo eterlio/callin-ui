@@ -7,47 +7,45 @@ export type PermissionString =
   | "files"
   | "income"
   | "expenditure"
-  | "role";
+  | "role"
+  | "plan";
+export type IPermission = Record<
+  PermissionString,
+  Record<PermissionOperation, number>
+>;
+
 export const PERMISSIONS_LIST: PermissionString[] = [
   "users",
   "files",
   "invoice",
   "organization",
   "report",
-  "expenditure",
-  "income",
-  "role",
 ];
-export type IPermission = Record<
-  PermissionString,
-  Record<PermissionOperation, number>
->;
+export const PERMISSIONS = structurePermissionsObject(PERMISSIONS_LIST);
 
 function structurePermissionsObject(
-  permissionsArray: PermissionString[]
+  permissionsArray: PermissionString[],
 ): IPermission {
   const permissions: any = {};
   for (let i = 0; i < permissionsArray.length; i++) {
     const resource = permissionsArray[i];
     permissions[resource] = {
-      create: 1 << (i * 4 + 1),
-      read: 1 << (i * 4 + 2),
-      update: 1 << (i * 4 + 3),
-      delete: 1 << (i * 4 + 4),
+      create: 32 + (i * 4 + 1),
+      read: 32 + (i * 4 + 2),
+      update: 32 + (i * 4 + 3),
+      delete: 32 + (i * 4 + 4),
     };
   }
   return permissions;
 }
 
-export const PERMISSIONS = structurePermissionsObject(PERMISSIONS_LIST);
-
 export const hasPermission = (
-  userPermission: number,
-  permissions: [PermissionString, PermissionOperation]
+  userPermission: string,
+  permissions: [PermissionString, PermissionOperation],
 ): boolean => {
-  if (!userPermission || !permissions) return false;
-  const allowed = Boolean(
-    userPermission & PERMISSIONS[permissions[0]][permissions[1]]
+  const permissionString = permissions[0]
+const permissionOperation = permissions[1];
+  return userPermission.includes(
+    String.fromCharCode(PERMISSIONS[permissionString][permissionOperation]),
   );
-  return allowed;
 };

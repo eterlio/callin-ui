@@ -1,6 +1,7 @@
 import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 import { getRequest } from "../../axios/privateRequest";
 import { useUserStore } from "../../store/users";
+import { useOrganizationStore } from "../../store/organization";
 
 export const routeRequireAuth = (
   toRoute: RouteLocationNormalized
@@ -23,18 +24,19 @@ export const authGetUser = async (
   next: NavigationGuardNext
 ) => {
   const userStore = useUserStore();
+  const organizationStore = useOrganizationStore()
   try {
     if (to.path === from.path) return next();
-    // if (!!userStore.currentUser) return next();
+    if(userStore.isAdmin)return next();
+   
     const {
       data: { response },
     } = await getRequest("/api/auth");
 
     if (response && response.authorized) {
-      // if we have a user, initialize user data
       userStore.setUser(response.user);
+      organizationStore.setOrganization(response.initData.organization)
     }
-
     return next();
   } catch (error) {
     const { required } = routeRequireAuth(to);

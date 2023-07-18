@@ -95,7 +95,7 @@
                 @sendCreditCardData="handlePayment"
               />
               <Button
-                class="btn-primary text-center"
+                class="btn btn-primary text-center"
                 :is-valid="payButtonDisabled"
                 @click="handleCreateSubscription"
                 :loading="loading"
@@ -155,7 +155,7 @@
     />
   </Modal>
 
-  <Modal
+  <!-- <Modal
     :buttons="[
       {
         title: 'Confirm',
@@ -182,12 +182,11 @@
       </p>
       <div class="h-[1.8px] bg-gray-100 w-full mt-5"></div>
     </div>
-  </Modal>
+  </Modal> -->
 </template>
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
 import FormTitle from "../../authentication/components/FormTitle.vue";
-import { useSubscriptionStore } from "../../../store/subscription";
 import {
   usePaymentStore,
   PaymentType,
@@ -203,18 +202,19 @@ import Input from "../../../components/inputs/Input.vue";
 import { postRequest } from "../../../axios/privateRequest";
 import { useUserStore } from "../../../store/users";
 import Icon from "../../../components/buttons/Icon.vue";
+import { useOrganizationStore } from "../../../store/organization";
 
 const loading = ref<boolean>(false);
-const subscriptionStore = useSubscriptionStore();
+const organizationStore = useOrganizationStore();
 const planStore = usePlanStore();
 const paymentStore = usePaymentStore();
 const userStore = useUserStore();
 const selectedPlan = ref<any>(null);
-const subscriptionId =
-  subscriptionStore.planId || userStore?.currentUser?.subscription.planId;
+
+const planId =  organizationStore.organization?.subscription.planId;
 async function getPlan() {
   try {
-    const { plan } = await planStore.getPlan(subscriptionId);
+    const { plan } = await planStore.getPlan(planId as string);
     selectedPlan.value = plan;
   } catch (error) {}
 }
